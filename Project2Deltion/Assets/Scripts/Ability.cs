@@ -4,96 +4,63 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-    //Mana
-    [SerializeField] private float currentMana;
-    [SerializeField] private float maxMana;
-    [SerializeField] private float upMana;
-    [SerializeField] private float damage;
-    // Stamina
-    [SerializeField] private float currentStamina;
-    [SerializeField] private float maxStamina;
-    [SerializeField] private float upStamina;
-    [SerializeField] private float downStamina;
-
-    private float timer;
+    //Ammo
+    public int currentAmmo;
+    [SerializeField] private int maxAmmo;
+    [SerializeField] private int ammoAmount;
+    //ClipMagazine
+    [SerializeField] private int maxClip;
+    [SerializeField] private int currentClipAmount;
 
     void Start()
     {
-        currentMana = maxMana;
-        currentStamina = maxStamina;
+        currentClipAmount = maxClip;
+        currentAmmo = maxAmmo;
     }
     void Update()
     {
-        Mana();
-        Stamina();
-        Abillity1();
-        Abillity2();
-        Abillity3();
+        Ammo();
+        Weapon1();
+        if (Input.GetButtonDown("R"))
+        {
+            if (currentClipAmount >= maxClip)
+            {
+                currentClipAmount = maxClip;
+            }
+            else
+            {
+                int needAmmo = maxClip - currentClipAmount;
+                currentClipAmount += needAmmo;
+                currentAmmo -= needAmmo;
+            }
+        }
     }
-    void Mana()
+    void Ammo()
     {
-        // All below CurrentMana
-        if (currentMana <= 0)
+        if (currentClipAmount <= 0)
         {
-            currentMana = 0;
+            currentClipAmount = 0;
         }
-        if (currentMana < maxMana)
+        if (currentClipAmount >= maxClip)
         {
-            currentMana += upMana * Time.deltaTime;
+            currentClipAmount = maxClip;
         }
-        if (currentMana >= maxMana)
+        if (currentAmmo <= 0)
         {
-            currentMana = maxMana;
+            currentAmmo = 0;
         }
-    }
-    void Stamina()
-    {
-        if (currentStamina <= 0)
+        if ( currentAmmo >= maxAmmo)
         {
-            currentStamina = 0;
-        }
-        if (currentStamina < maxStamina)
-        {
-            currentStamina += upStamina * Time.deltaTime;
-        }
-        if (currentStamina >= maxStamina)
-        {
-            currentStamina = maxStamina;
+            currentAmmo = maxAmmo;
         }
     }
-    void Abillity1()
+    void Weapon1()
     {
         // Ability 01 
         if (Input.GetButtonDown("Fire1"))
         {
-            if (currentMana < damage)
-            {
-                currentMana -= 0;
-            }
-            else
-            {
-                currentMana -= damage;
-            }
+            currentClipAmount -= ammoAmount;
         }
     }
-    void Abillity2()
-    {
-        if (Input.GetButtonDown("Fire2"))
-        {
-            if (currentStamina < downStamina)
-            {
-                currentStamina -= 0;
-            }
-            else
-            {
-                currentStamina -= downStamina;
-            }
-        }
-    }
-    void Abillity3()
-    {
-
-    }
-
 }
 

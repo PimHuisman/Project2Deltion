@@ -244,9 +244,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eefbdc6ce6c1a6419415a23037e82ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMana: 100
-  upAmount: 5
-  damage: 10
+  currentAmmo: 0
+  maxAmmo: 100
+  ammoAmount: 1
+  maxClip: 16
+  currentClipAmount: 0
 --- !u!114 &90061960
 MonoBehaviour:
   m_ObjectHideFlags: 0
