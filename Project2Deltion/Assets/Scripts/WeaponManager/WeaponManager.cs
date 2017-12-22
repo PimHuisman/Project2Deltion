@@ -5,26 +5,30 @@ using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
-    //Test
-    [SerializeField] private GameObject mainWeapon;
-    [SerializeField] private GameObject secondaryWeapon;
-    [SerializeField] private GameObject weaponAbility;
-    //All Ammo Text
-    public Text ammoText;
+    [SerializeField] private GameObject[] weapons;
+    [SerializeField] private float scrollWheel;
 
-    void Start ()
+    void Start()
     {
-		
-	}
+        weapons[0].SetActive(true);
+    }
+    void Update()
+    {
+        scrollWheel = Input.GetAxis("Mouse ScrollWheel")*5;
 
-	void Update ()
-    {
-        //Test
-        if (Input.GetButtonDown("Fire3"))
+        //
+        if (scrollWheel <0)
         {
-            mainWeapon.gameObject.SetActive(false);
-            secondaryWeapon.gameObject.SetActive(false);
-            weaponAbility.gameObject.SetActive(true);
+            weapons[0].SetActive(true);
+            weapons[1].SetActive(false);
+        }
+        else if (scrollWheel >0)
+        {
+            weapons[1].SetActive(true);
+            weapons[0].SetActive(false);
         }
     }
+   
+
 }
+

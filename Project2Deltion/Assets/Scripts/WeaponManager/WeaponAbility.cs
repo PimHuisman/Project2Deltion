@@ -28,14 +28,14 @@ public class WeaponAbility : MonoBehaviour
     }
     void Update ()
     {
-        Debug.DrawRay(transform.position, transform.forward * -10, Color.red);
+        Debug.DrawRay(transform.position, transform.forward * 10, Color.red);
         if (Input.GetButtonDown("Fire1"))
         {
             if (bulletHoleH)
             {
                 Rigidbody bulletInstance;
                 bulletInstance = Instantiate(bullet, barrelEnd.position, barrelEnd.rotation) as Rigidbody;
-                bulletInstance.AddForce(barrelEnd.forward * 1000);
+                bulletInstance.velocity = barrelEnd.forward *20;
                 currentClipAmountH -= fireAmmoH;
             }
         }
@@ -47,7 +47,7 @@ public class WeaponAbility : MonoBehaviour
         if (Input.GetButtonDown("R"))
         {
             //Harpoon Reload
-            if (fireAmmoH <= 0)
+            if (currentAmmoH <= 0)
             {
                 currentAmmoH = 0;
                 bulletHoleH = false;

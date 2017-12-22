@@ -5,97 +5,162 @@ using UnityEngine.UI;
 
 public class MainWeapons : MonoBehaviour
 {
-    public Text ammoText;
-    //Ammo for Musket
-    public int currentAmmoM;
-    [SerializeField] private int maxAmmoM;
-    [SerializeField] private int fireAmmoM;
-    //Clip for Musket
-    [SerializeField] private int maxClipM;
-    [SerializeField] private int currentClipAmountM;
+    //Ammo Text
+    [SerializeField] private Text ammoText;
+    [SerializeField] private string weaponType;
+    //Ammo
+    public int currentAmmo;
+    [SerializeField] private int maxAmmo;
+    [SerializeField] private int fireAmmo;
+    //Clip (Magazine)
+    [SerializeField] private int maxClip;
+    [SerializeField] private int currentClipAmount;
     //RayCastBullets
-    [SerializeField] GameObject musketHole;
+    [SerializeField] GameObject hole;
+    [SerializeField] private float raycastLength;
+    [SerializeField] private Transform cameraPotition;
     private RaycastHit hit;
-    private bool bulletHoleM;
+    private bool bulletHole;
+    //ReloadTimer
+    private bool timeSwitch;
+    private float currentTime;
+    [SerializeField] private float maxTime;
+    //AddForce
+    [SerializeField] private float inpactForce;
+    //FireRate
+    private bool fire;
+    private float fireTime;
+    [SerializeField] private float fireAgain;
 
     void Start()
     {
-        currentClipAmountM = maxClipM;
-        currentAmmoM = maxAmmoM;
-        bulletHoleM = true;
+        currentClipAmount = maxClip;
+        currentAmmo = maxAmmo;
+        currentTime = maxTime;
+        bulletHole = true;
+        timeSwitch = false;
+        fire = false;
+        fireTime = fireAgain;
     }
     void Update()
     {
+        AmmoCheck();
+        Weapon();
         Reload();
-        MusketAmmo();
-        Musket();
+        FireRate();
     }
     void Reload()
     {
-        if (Input.GetButtonDown("R"))
+        // Press R for reload or when it hits zero
+        if (currentClipAmount <= maxAmmo)
         {
-            //Musket Reload
-            if (fireAmmoM <= 0)
+            if (Input.GetButtonDown("R") || currentClipAmount <= 0)
             {
-                currentAmmoM = 0;
-                bulletHoleM = false;
+                timeSwitch = true;
             }
+        }
+    }
+    void AmmoCheck()
+    {
+        // Ammo Text
+        ammoText.text = (weaponType + currentClipAmount + "/" + currentAmmo);
+        // Check if timeSwitch == true
+        if (timeSwitch)
+        {
+            currentTime -= Time.deltaTime;
+        }
+        if (currentTime <= 0)
+        {
+            // If you have NO Ammo at all
+            if (currentAmmo <= 0 && currentClipAmount <= 0)
+            {
+                bulletHole = false;
+            }
+            // If you have Ammo for clip
             else
             {
-                int needAmmo = maxClipM - currentClipAmountM;
-                currentClipAmountM += needAmmo;
-                currentAmmoM -= needAmmo;
-                bulletHoleM = true;
-            }
-            if (currentAmmoM < maxClipM)
-            {
-                currentClipAmountM += currentAmmoM;
-            }
-            if (currentClipAmountM >= maxClipM)
-            {
-                currentClipAmountM = maxClipM;
-            }
-        }
-    }
-    void MusketAmmo()
-    {
-        //MusketAmmo
-        {
-            ammoText.text = ("Musket:" + currentClipAmountM + "/" + currentAmmoM);
-            if (currentClipAmountM <= 0)
-            {
-                currentClipAmountM = 0;
-                bulletHoleM = false;
-            }
-            if (currentClipAmountM >= maxClipM)
-            {
-                currentClipAmountM = maxClipM;
-            }
-            if (currentAmmoM <= 0)
-            {
-                currentAmmoM = 0;
-            }
-            if (currentAmmoM >= maxAmmoM)
-            {
-                currentAmmoM = maxAmmoM;
-            }
-        }
-    }
-    void Musket()
-    {
-        // MainWeapon 
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (Physics.Raycast(transform.position, transform.forward, out hit, 1500f))
-            {
-                if (bulletHoleM)
+                timeSwitch = false;
+                currentTime = maxTime;
+                int needAmmo = maxClip - currentClipAmount;
+                currentClipAmount += needAmmo;
+                currentAmmo -= needAmmo;
+                bulletHole = true;
+                if (currentAmmo < maxClip)
                 {
-                    GameObject g = Instantiate(musketHole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
-                    currentClipAmountM -= fireAmmoM;
+                    currentClipAmount += currentAmmo;
+                }
+                if (currentClipAmount >= maxClip)
+                {
+                    currentClipAmount = maxClip;
+                }
+                if (currentClipAmount <= 0)
+                {
+                    currentClipAmount = 0;
+                    bulletHole = false;
+                }
+                if (currentClipAmount >= maxClip)
+                {
+                    currentClipAmount = maxClip;
+                }
+                if (currentAmmo <= 0)
+                {
+                    currentAmmo = 0;
+                }
+                if (currentAmmo >= maxAmmo)
+                {
+                    currentAmmo = maxAmmo;
                 }
             }
-            Debug.DrawRay(transform.position, transform.forward * 10, Color.red);
         }
     }
+
+    void FireRate()
+    {
+        if (fire)
+        {
+            fireTime -= Time.deltaTime;
+        }
+        if (fireTime <= 0)
+        {
+            fire = false;
+            fireTime = fireAgain;
+        }
+    }
+
+    void Weapon()
+    {
+        // Weapon Functions
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (bulletHole)
+            {
+                if (!fire)
+                {
+                    if (currentClipAmount > 0)
+                    {
+                        if (timeSwitch)
+                        {
+                            timeSwitch = false;
+                            currentTime = maxTime;
+                        }
+                        currentClipAmount -= fireAmmo;
+                        if (Physics.Raycast(cameraPotition.position, cameraPotition.forward, out hit, raycastLength))
+                        {
+                            GameObject g = Instantiate(hole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+                            g.transform.parent = hit.transform;
+
+                            if (hit.rigidbody != null)
+                            {
+                                hit.rigidbody.AddForce(-hit.normal * inpactForce);
+                            }
+                        }
+                    }
+                }
+            }
+            fire = true;
+            Debug.DrawRay(cameraPotition.position, cameraPotition.forward * 10, Color.red);
+        }
+    }
+    
 }
 
