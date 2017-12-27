@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class MainWeapons : MonoBehaviour
 {
+    //ToolbarWeapon
+    [HideInInspector]
+    public int weaponToolbarTop;
+    public int weaponToolbarBottom;
+    public string weaponCurrentTab;
+
     //Ammo Text
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
@@ -14,11 +20,11 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private int fireAmmo;
     //Clip (Magazine)
     [SerializeField] private int maxClip;
-    private int currentClipAmount;
+    [SerializeField] private int currentClipAmount;
     //RayCastBullets
     [SerializeField] GameObject hole;
     [SerializeField] private float raycastLength;
-    [SerializeField] private Transform cameraPotition;
+    [SerializeField] private Transform cameraPosition;
     private RaycastHit hit;
     private bool mayFire;
     //ReloadTimer
@@ -47,7 +53,7 @@ public class MainWeapons : MonoBehaviour
     void Update()
     {
         AmmoCheck();
-        Weapon(damage);
+        Weapon();
         Reload();
         FireRate();
     }
@@ -129,7 +135,7 @@ public class MainWeapons : MonoBehaviour
         }
     }
 
-    public void Weapon(int damage)
+    public void Weapon()
     {
         // Weapon Functions
         if (Input.GetButtonDown("Fire1"))
@@ -146,18 +152,14 @@ public class MainWeapons : MonoBehaviour
                             currentTime = reloadTime;
                         }
                         currentClipAmount -= fireAmmo;
-                        if (Physics.Raycast(cameraPotition.position, cameraPotition.forward, out hit, raycastLength))
+                        if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {
                             GameObject g = Instantiate(hole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
                             g.transform.parent = hit.transform;
-                            if (hit.transform.gameObject != null)
+                            if (hit.transform.tag == ("Enemy"))
                             {
-                                //for (int i = 0; i < length; i++)
-                                {
-                                    hit.transform.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
-                                }
+                                hit.collider.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
                             }
-
                             if (hit.rigidbody != null)
                             {
                                 hit.rigidbody.AddForce(-hit.normal * inpactForce);
@@ -167,7 +169,7 @@ public class MainWeapons : MonoBehaviour
                 }
             }
             fire = true;
-            Debug.DrawRay(cameraPotition.position, cameraPotition.forward * 10, Color.red);
+            Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 10, Color.red);
         }
     }
 }

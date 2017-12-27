@@ -5,21 +5,24 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    //TabInspector
+    [HideInInspector]
+    public int toolbarTop;
+    public int toolbarBottom;
+    public string currentTab;
     //Health
     [SerializeField] private int health;
+    [SerializeField] private bool dead;
     public int currentHealth;
     //RagDoll
     [SerializeField] private GameObject[] body;
     //?!#.....
     [SerializeField] private Transform head;
     //WalkField
-    [SerializeField] Transform[] destination;
+    [SerializeField] private Transform[] destination;
     [SerializeField] private int point;
     [SerializeField] private int random;
     NavMeshAgent agent;
-    //AttackRayCast
-    private RaycastHit attack;
-    [SerializeField] private float attackLength;
     //LookRaycast
     private RaycastHit look;
     [SerializeField] private float lookLength;
@@ -27,44 +30,79 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private bool chasing;
     [SerializeField] private Transform player;
     //isAttacking
+    private RaycastHit attack;
+    [SerializeField] private float attackLength;
+    //isThinking;
+    [SerializeField] private bool senseField;
+    private float thinkTimer;
+    [SerializeField] private float maxTimer;
 
     void Start()
     {
-        agent = this.GetComponent<NavMeshAgent>();
-        agent.SetDestination(destination[point].position);
+        //agent = this.GetComponent<NavMeshAgent>();
+        //agent.SetDestination(destination[point].position);
         currentHealth = health;
+        thinkTimer = maxTimer;
     }
     void Update()
     {
-        LookField();
+        isLooking();
         WalkArea();
         isAttack();
-        isChasing();
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            body[body.Length].transform.GetComponent<Rigidbody>().isKinematic = false;
-        }
+        isThinking();
     }
     public void EnemyHealth(int damage)
     {
-        Debug.Log(damage);
         currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            dead = true;
+            currentHealth = 0;
+            for (int i = 0; i < body.Length; i++)
+            {
+                body[i].transform.GetComponent<Rigidbody>().isKinematic = false;
+            }
+        }
     }
-    void LookField()
+    void isLooking()
     {
         if(Physics.Raycast(head.position, head.forward, out look, lookLength))
         {
-            if (look.collider.tag == "Player")
+            if (look.transform.tag == "Player")
             {
+                chasing = true;
                 isChasing();
             }
         }
         Debug.DrawRay(head.position, head.forward * 20, Color.green);
     }
+    void isThinking()
+    {
+        // If you are Chased but he doesnt see you in the SenseField he will Chase you for a X Amount of Seconds  
+        agent = this.GetComponent<NavMeshAgent>();
+        if (chasing && !senseField && !dead)
+        {
+            thinkTimer -= Time.deltaTime;
+            agent.SetDestination(player.position);
+            if (thinkTimer <= 0)
+            {
+                thinkTimer = 0;
+                thinkTimer = maxTimer;
+                chasing = false;
+            }
+        }
+    }
     void WalkArea()
     {
-        
+        // walking to points
+    }
+    void isChasing()
+    {
+        agent = this.GetComponent<NavMeshAgent>();
+        if (chasing && !dead)
+        {
+            agent.SetDestination(player.position);
+        }
     }
     void isAttack()
     {
@@ -75,29 +113,27 @@ public class EnemyAI : MonoBehaviour
         }
             Debug.DrawRay(head.position, head.forward * 3, Color.red);
     }
-    void isChasing()
+    // If you see Player, Enemy is Chasing
+    void OnTriggerStay(Collider other)
     {
-        if (chasing)
+        if (other.gameObject.tag == "Player")
         {
-            agent.SetDestination(player.position);
-        }
-    }
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Point")
-        {
-            agent = this.GetComponent<NavMeshAgent>();
-            if (this.point == point)
+            if (!dead)
             {
-                if( point > 4)
-                {
-                    point = 0;
-                }
-                point++;
+                senseField = true;
+                chasing = true;
+                isChasing();
             }
-            agent.SetDestination(destination[point].position);
-            Debug.Log(point);
         }
     }
+    // If you exit the SenseField, Enemy will not chase anymore(Enemy will go to your last Position)
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            senseField = false;
+        }
+    }
+
 }
 

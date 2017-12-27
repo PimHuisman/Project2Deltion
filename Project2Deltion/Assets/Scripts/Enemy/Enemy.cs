@@ -7,13 +7,15 @@ using UnityEngine;
 public class Enemy
 {
     public string enemyName;
-    public int healthG;
+    public string enemyDescription;
     public int enemyID;
+    public GameObject enemyE;
 
-    public Enemy(string name, int health, int id)
+    public Enemy(string name, string description, GameObject enemy, int id)
     {
         enemyName = name;
-        healthG = health;
+        enemyDescription = description;
         enemyID = id;
+        enemyE = enemy;
     }
 }
