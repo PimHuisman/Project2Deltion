@@ -14,30 +14,32 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private int fireAmmo;
     //Clip (Magazine)
     [SerializeField] private int maxClip;
-    [SerializeField] private int currentClipAmount;
+    private int currentClipAmount;
     //RayCastBullets
     [SerializeField] GameObject hole;
     [SerializeField] private float raycastLength;
     [SerializeField] private Transform cameraPotition;
     private RaycastHit hit;
-    private bool bulletHole;
+    private bool mayFire;
     //ReloadTimer
     private bool timeSwitch;
     private float currentTime;
-    [SerializeField] private float maxTime;
+    [SerializeField] private float reloadTime;
     //AddForce
     [SerializeField] private float inpactForce;
     //FireRate
     private bool fire;
     private float fireTime;
     [SerializeField] private float fireAgain;
+    //
+    [SerializeField] private int damage;
 
     void Start()
     {
         currentClipAmount = maxClip;
         currentAmmo = maxAmmo;
-        currentTime = maxTime;
-        bulletHole = true;
+        currentTime = reloadTime;
+        mayFire = true;
         timeSwitch = false;
         fire = false;
         fireTime = fireAgain;
@@ -45,7 +47,7 @@ public class MainWeapons : MonoBehaviour
     void Update()
     {
         AmmoCheck();
-        Weapon();
+        Weapon(damage);
         Reload();
         FireRate();
     }
@@ -74,17 +76,17 @@ public class MainWeapons : MonoBehaviour
             // If you have NO Ammo at all
             if (currentAmmo <= 0 && currentClipAmount <= 0)
             {
-                bulletHole = false;
+                mayFire = false;
             }
             // If you have Ammo for clip
             else
             {
                 timeSwitch = false;
-                currentTime = maxTime;
+                currentTime = reloadTime;
                 int needAmmo = maxClip - currentClipAmount;
                 currentClipAmount += needAmmo;
                 currentAmmo -= needAmmo;
-                bulletHole = true;
+                mayFire = true;
                 if (currentAmmo < maxClip)
                 {
                     currentClipAmount += currentAmmo;
@@ -96,7 +98,7 @@ public class MainWeapons : MonoBehaviour
                 if (currentClipAmount <= 0)
                 {
                     currentClipAmount = 0;
-                    bulletHole = false;
+                    mayFire = false;
                 }
                 if (currentClipAmount >= maxClip)
                 {
@@ -127,12 +129,12 @@ public class MainWeapons : MonoBehaviour
         }
     }
 
-    void Weapon()
+    public void Weapon(int damage)
     {
         // Weapon Functions
         if (Input.GetButtonDown("Fire1"))
         {
-            if (bulletHole)
+            if (mayFire)
             {
                 if (!fire)
                 {
@@ -141,13 +143,20 @@ public class MainWeapons : MonoBehaviour
                         if (timeSwitch)
                         {
                             timeSwitch = false;
-                            currentTime = maxTime;
+                            currentTime = reloadTime;
                         }
                         currentClipAmount -= fireAmmo;
                         if (Physics.Raycast(cameraPotition.position, cameraPotition.forward, out hit, raycastLength))
                         {
                             GameObject g = Instantiate(hole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
                             g.transform.parent = hit.transform;
+                            if (hit.transform.gameObject != null)
+                            {
+                                //for (int i = 0; i < length; i++)
+                                {
+                                    hit.transform.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
+                                }
+                            }
 
                             if (hit.rigidbody != null)
                             {
@@ -161,6 +170,5 @@ public class MainWeapons : MonoBehaviour
             Debug.DrawRay(cameraPotition.position, cameraPotition.forward * 10, Color.red);
         }
     }
-    
 }
 
