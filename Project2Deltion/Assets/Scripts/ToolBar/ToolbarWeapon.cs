@@ -18,7 +18,9 @@ public class ToolbarWeapon : Editor
     private SerializedProperty maxClip;
     private SerializedProperty currentClipAmount;
 
-    private SerializedProperty hole;
+    private SerializedProperty bloodHole;
+    private SerializedProperty houseHole;
+    private SerializedProperty normalHole;
     private SerializedProperty raycastLength;
     private SerializedProperty cameraPosition;
 
@@ -40,7 +42,9 @@ public class ToolbarWeapon : Editor
         fireAmmo = soTarget.FindProperty("fireAmmo");
         maxClip = soTarget.FindProperty("maxClip");
         currentClipAmount = soTarget.FindProperty("currentClipAmount");
-        hole = soTarget.FindProperty("hole");
+        bloodHole = soTarget.FindProperty("bloodHole");
+        houseHole = soTarget.FindProperty("houseHole");
+        normalHole = soTarget.FindProperty("normalHole");
         raycastLength = soTarget.FindProperty("raycastLength");
         cameraPosition = soTarget.FindProperty("cameraPosition");
         reloadTime = soTarget.FindProperty("reloadTime");
@@ -52,6 +56,8 @@ public class ToolbarWeapon : Editor
 
     public override void OnInspectorGUI()
     {
+        //base.OnInspectorGUI();
+        //DrawDefaultInspector();
         EditorGUI.BeginChangeCheck();
 
         myTarget.weaponToolbarTop = GUILayout.Toolbar(myTarget.weaponToolbarTop, new string[] { "AmmoInfo", "ClipInfo", "RaycastInfo", "Bullet/ClipInfo" });
@@ -98,7 +104,9 @@ public class ToolbarWeapon : Editor
                 EditorGUILayout.PropertyField(currentClipAmount);
                 break;
             case "RaycastInfo":
-                EditorGUILayout.PropertyField(hole);
+                EditorGUILayout.PropertyField(bloodHole);
+                EditorGUILayout.PropertyField(houseHole);
+                EditorGUILayout.PropertyField(normalHole);
                 EditorGUILayout.PropertyField(raycastLength);
                 EditorGUILayout.PropertyField(cameraPosition);
                 break;

@@ -22,7 +22,9 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private int maxClip;
     [SerializeField] private int currentClipAmount;
     //RayCastBullets
-    [SerializeField] GameObject hole;
+    [SerializeField] private GameObject bloodHole;
+    [SerializeField] private GameObject houseHole;
+    [SerializeField] private GameObject normalHole;
     [SerializeField] private float raycastLength;
     [SerializeField] private Transform cameraPosition;
     private RaycastHit hit;
@@ -154,12 +156,26 @@ public class MainWeapons : MonoBehaviour
                         currentClipAmount -= fireAmmo;
                         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {
-                            GameObject g = Instantiate(hole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
-                            g.transform.parent = hit.transform;
-                            if (hit.transform.tag == ("Enemy"))
+                            if (hit.transform.tag != null)
                             {
-                                hit.collider.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
+                                if (hit.transform.tag == "Enemy")
+                                {
+                                    GameObject g = Instantiate(bloodHole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+                                    g.transform.parent = hit.transform;
+                                    hit.collider.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
+                                }
+                                if (hit.transform.tag == "House")
+                                {
+                                    GameObject h = Instantiate(houseHole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+                                    h.transform.parent = hit.transform;
+                                }
                             }
+                            if (hit.transform.tag == "Untagged")
+                            {
+                                GameObject n = Instantiate(normalHole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+                                n.transform.parent = hit.transform;
+                            }
+                           
                             if (hit.rigidbody != null)
                             {
                                 hit.rigidbody.AddForce(-hit.normal * inpactForce);

@@ -14,12 +14,14 @@ public class ToolbarEnemy : Editor
     private SerializedProperty dead;
 
     private SerializedProperty body;
+    private SerializedProperty ragDoll;
 
     private SerializedProperty head;
 
-    private SerializedProperty destination;
-    private SerializedProperty point;
+    private SerializedProperty points;
+    private SerializedProperty destPoint;
     private SerializedProperty random;
+    private SerializedProperty onWayPoint;
 
     private SerializedProperty lookLength;
 
@@ -42,10 +44,12 @@ public class ToolbarEnemy : Editor
         currentHealth = soTarget.FindProperty("currentHealth");
         dead = soTarget.FindProperty("dead");
         body = soTarget.FindProperty("body");
+        ragDoll = soTarget.FindProperty("ragDoll");
         head = soTarget.FindProperty("head");
-        destination = soTarget.FindProperty("destination");
-        point = soTarget.FindProperty("point");
+        points = soTarget.FindProperty("points");
+        destPoint = soTarget.FindProperty("destPoint");
         random = soTarget.FindProperty("random");
+        onWayPoint = soTarget.FindProperty("onWayPoint");
         lookLength = soTarget.FindProperty("lookLength");
         chasing = soTarget.FindProperty("chasing");
         player = soTarget.FindProperty("player");
@@ -56,6 +60,7 @@ public class ToolbarEnemy : Editor
 
     public override void OnInspectorGUI()
     {
+        //base.OnInspectorGUI();
         //DrawDefaultInspector();
         soTarget.Update();
 
@@ -126,6 +131,7 @@ public class ToolbarEnemy : Editor
                     }
                 }
                 EditorGUI.indentLevel -= 1;
+                EditorGUILayout.PropertyField(ragDoll);
                 break;
             case "isChasing":
                 EditorGUILayout.PropertyField(chasing);
@@ -139,20 +145,21 @@ public class ToolbarEnemy : Editor
                 EditorGUILayout.PropertyField(maxTimer);
                 break;
             case "WalkField":
-                EditorGUILayout.PropertyField(destination);
+                EditorGUILayout.PropertyField(points);
                 EditorGUI.indentLevel += 1;
-                if (destination.isExpanded)
+                if (points.isExpanded)
                 {
-                    EditorGUILayout.PropertyField(destination.FindPropertyRelative("Array.size"));
-                    for (int i = 0; i < destination.arraySize; i++)
+                    EditorGUILayout.PropertyField(points.FindPropertyRelative("Array.size"));
+                    for (int i = 0; i < points.arraySize; i++)
                     {
-                        EditorGUILayout.PropertyField(destination.GetArrayElementAtIndex(i));
+                        EditorGUILayout.PropertyField(points.GetArrayElementAtIndex(i));
                     }
                 }
                 EditorGUI.indentLevel -= 1;
 
-                EditorGUILayout.PropertyField(point);
+                EditorGUILayout.PropertyField(destPoint);
                 EditorGUILayout.PropertyField(random);
+                EditorGUILayout.PropertyField(onWayPoint);
                 break;
             case "Health":
                 EditorGUILayout.PropertyField(health);
