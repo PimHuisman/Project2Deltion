@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
-{
+{   
     //TabInspector
     [HideInInspector]
     public int toolbarTop;
@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour
     public string currentTab;
     //Health
     [SerializeField] private int health;
-    [SerializeField] private bool dead;
+    public bool dead;
     public int currentHealth;
     //RagDoll
     [SerializeField] private GameObject[] body;
@@ -23,38 +23,58 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform[] points;
     [SerializeField] private int destPoint;
     [SerializeField] private int random;
-    [SerializeField] private bool onWayPoint;
     NavMeshAgent agent;
     //LookRaycast
     private RaycastHit look;
     [SerializeField] private float lookLength;
     //isChasing
-    [SerializeField] private bool chasing;
+    public bool chasing;
     [SerializeField] private Transform player;
     //isAttacking
     private RaycastHit attack;
     [SerializeField] private float attackLength;
+    [SerializeField] private int damage;
+    [SerializeField] private bool attacking;
+    [SerializeField] private float attackAgain;
+    private float attackTime;
     //isThinking;
-    [SerializeField] private bool senseField;
-    private float thinkTimer;
+    public bool senseField;
+    [SerializeField] private float thinkTimer;
     [SerializeField] private float maxTimer;
 
     void Start()
     {
         currentHealth = health;
         thinkTimer = maxTimer;
-        WalkArea();
+        attackTime = attackAgain;
+        agent = this.GetComponent<NavMeshAgent>();
+        agent.SetDestination(points[0].position);
     }
     void Update()
     {
         isLooking();
-        isAttack();
+        isAttacking();
         isThinking();
+        isCheck();
+    }
+    void isCheck()
+    {
+        // Dead ??
         if (currentHealth <= 0)
         {
             dead = true;
             currentHealth = 0;
             EnemyHealth(0);
+        }
+        // Attacking ??
+        if (attacking)
+        {
+            attackTime -= Time.deltaTime;
+        }
+        if (attackTime <= 0)
+        {
+            attacking = false;
+            attackTime = attackAgain;
         }
     }
 
@@ -98,51 +118,53 @@ public class EnemyAI : MonoBehaviour
                 thinkTimer = 0;
                 thinkTimer = maxTimer;
                 chasing = false;
+                agent.SetDestination(points[destPoint].position);
             }
         }
     }
-    void WalkArea()
+    public void WalkArea()
     {
+        // 
         agent = this.GetComponent<NavMeshAgent>();
-        
+        destPoint++;
+        if (destPoint >= points.Length)
+        {
+            destPoint = 0;
+        }
+        agent.SetDestination(points[destPoint].position);
     }
 
-    void isChasing()
+    public void isChasing()
     {
+        // Chasing Player
         agent = this.GetComponent<NavMeshAgent>();
         if (chasing && !dead)
         {
             agent.SetDestination(player.position);
         }
     }
-    void isAttack()
+    void isAttacking()
     {
-        //BOOL AI is attacking
-        if (Physics.Raycast(head.position, head.forward, out attack, lookLength))
+        // AI is attacking
+        if (Physics.Raycast(head.position, head.forward, out attack, attackLength))
         {
-            // -health from player
+            if (!attacking)
+            {
+                if (attack.transform.tag == "Player")
+                {
+                    attack.transform.gameObject.GetComponent<HealthManager>().Health(damage);
+                    attacking = true;
+                }
+                // Optional Attacking Citizens
+            }
         }
             Debug.DrawRay(head.position, head.forward * 3, Color.red);
     }
-        // If you see Player, Enemy is Chasing
-        void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "WayPoint")
         {
-            if (!dead)
-            {
-                senseField = true;
-                chasing = true;
-                isChasing();
-            }
-        }
-    }
-    // If you exit the SenseField, Enemy will not chase anymore(Enemy will go to your last Position)
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            senseField = false;
+            WalkArea();
         }
     }
 

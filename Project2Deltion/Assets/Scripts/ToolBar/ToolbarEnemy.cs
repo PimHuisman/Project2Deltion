@@ -21,7 +21,6 @@ public class ToolbarEnemy : Editor
     private SerializedProperty points;
     private SerializedProperty destPoint;
     private SerializedProperty random;
-    private SerializedProperty onWayPoint;
 
     private SerializedProperty lookLength;
 
@@ -29,9 +28,13 @@ public class ToolbarEnemy : Editor
     private SerializedProperty player;
 
     private SerializedProperty attackLength;
+    private SerializedProperty damage;
+    private SerializedProperty attacking;
+    private SerializedProperty attackAgain;
 
     private SerializedProperty senseField;
     private SerializedProperty maxTimer;
+    private SerializedProperty thinkTimer;
 
 
 
@@ -49,13 +52,16 @@ public class ToolbarEnemy : Editor
         points = soTarget.FindProperty("points");
         destPoint = soTarget.FindProperty("destPoint");
         random = soTarget.FindProperty("random");
-        onWayPoint = soTarget.FindProperty("onWayPoint");
         lookLength = soTarget.FindProperty("lookLength");
         chasing = soTarget.FindProperty("chasing");
         player = soTarget.FindProperty("player");
         attackLength = soTarget.FindProperty("attackLength");
+        damage = soTarget.FindProperty("damage");
+        attacking = soTarget.FindProperty("attacking");
+        attackAgain = soTarget.FindProperty("attackAgain");
         senseField = soTarget.FindProperty("senseField");
         maxTimer = soTarget.FindProperty("maxTimer");
+        thinkTimer = soTarget.FindProperty("thinkTimer");
     }
 
     public override void OnInspectorGUI()
@@ -139,10 +145,14 @@ public class ToolbarEnemy : Editor
                 break;
             case "isAttacking":
                 EditorGUILayout.PropertyField(attackLength);
+                EditorGUILayout.PropertyField(damage);
+                EditorGUILayout.PropertyField(attacking);
+                EditorGUILayout.PropertyField(attackAgain);
                 break;
             case "isThinking":
                 EditorGUILayout.PropertyField(senseField);
                 EditorGUILayout.PropertyField(maxTimer);
+                EditorGUILayout.PropertyField(thinkTimer);
                 break;
             case "WalkField":
                 EditorGUILayout.PropertyField(points);
@@ -159,7 +169,6 @@ public class ToolbarEnemy : Editor
 
                 EditorGUILayout.PropertyField(destPoint);
                 EditorGUILayout.PropertyField(random);
-                EditorGUILayout.PropertyField(onWayPoint);
                 break;
             case "Health":
                 EditorGUILayout.PropertyField(health);

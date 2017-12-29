@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
-    void Start()
+    [SerializeField] private int currentHealth;
+    [SerializeField] private int maxHealth;
+    private void Start()
     {
-
+        currentHealth = maxHealth;
     }
-    void Update()
+    public void Health(int damage)
     {
-
-    }
-    void Health()
-    {
-
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            print("you are Dead!!!!??");
+        }
     }
 }
 
