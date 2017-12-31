@@ -162,7 +162,7 @@ public class MainWeapons : MonoBehaviour
                                 {
                                     GameObject g = Instantiate(bloodHole, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
                                     g.transform.parent = hit.transform;
-                                    hit.collider.gameObject.GetComponent<EnemyAI>().EnemyHealth(damage);
+                                    hit.collider.gameObject.GetComponent<EnemyHealth>().EnemyHealthCheck(damage);
                                 }
                                 if (hit.transform.tag == "House")
                                 {

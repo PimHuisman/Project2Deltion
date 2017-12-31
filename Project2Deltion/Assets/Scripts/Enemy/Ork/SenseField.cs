@@ -10,7 +10,8 @@ public class SenseField : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            if (!enemy.GetComponent<EnemyAI>().dead)
+            bool dDead = enemy.GetComponent<EnemyHealth>().dead;
+            if (!dDead)
             {
                 enemy.GetComponent<EnemyAI>().chasing = true;
                 enemy.GetComponent<EnemyAI>().senseField = true;

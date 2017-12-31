@@ -9,8 +9,6 @@ public class ToolbarEnemy : Editor
     private EnemyAI myTarget;
     private SerializedObject soTarget;
 
-    private SerializedProperty health;
-    private SerializedProperty currentHealth;
     private SerializedProperty dead;
 
     private SerializedProperty body;
@@ -43,8 +41,6 @@ public class ToolbarEnemy : Editor
         myTarget = (EnemyAI)target;
         soTarget = new SerializedObject(target);
 
-        health = soTarget.FindProperty("health");
-        currentHealth = soTarget.FindProperty("currentHealth");
         dead = soTarget.FindProperty("dead");
         body = soTarget.FindProperty("body");
         ragDoll = soTarget.FindProperty("ragDoll");
@@ -93,7 +89,7 @@ public class ToolbarEnemy : Editor
                 break;
         }
 
-        myTarget.toolbarBottom = GUILayout.Toolbar(myTarget.toolbarBottom, new string[] {"WalkField", "Health", "?!#.....", "LookRayCast" });
+        myTarget.toolbarBottom = GUILayout.Toolbar(myTarget.toolbarBottom, new string[] {"WalkField", "?!#.....", "LookRayCast" });
         switch (myTarget.toolbarBottom)
         {
             case 0:
@@ -102,13 +98,9 @@ public class ToolbarEnemy : Editor
                 break;
             case 1:
                 myTarget.toolbarTop = 4;
-                myTarget.currentTab = "Health";
-                break;
-            case 2:
-                myTarget.toolbarTop = 4;
                 myTarget.currentTab = "?!#.....";
                 break;
-            case 3:
+            case 2:
                 myTarget.toolbarTop = 4;
                 myTarget.currentTab = "LookRayCast";
                 break;
@@ -169,11 +161,6 @@ public class ToolbarEnemy : Editor
 
                 EditorGUILayout.PropertyField(destPoint);
                 EditorGUILayout.PropertyField(random);
-                break;
-            case "Health":
-                EditorGUILayout.PropertyField(health);
-                EditorGUILayout.PropertyField(currentHealth);
-                EditorGUILayout.PropertyField(dead);
                 break;
             case "?!#.....":
                 EditorGUILayout.PropertyField(head);

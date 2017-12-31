@@ -10,10 +10,6 @@ public class EnemyAI : MonoBehaviour
     public int toolbarTop;
     public int toolbarBottom;
     public string currentTab;
-    //Health
-    [SerializeField] private int health;
-    public bool dead;
-    public int currentHealth;
     //RagDoll
     [SerializeField] private GameObject[] body;
     [SerializeField] private GameObject ragDoll;
@@ -44,7 +40,6 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        currentHealth = health;
         thinkTimer = maxTimer;
         attackTime = attackAgain;
         agent = this.GetComponent<NavMeshAgent>();
@@ -59,13 +54,6 @@ public class EnemyAI : MonoBehaviour
     }
     void isCheck()
     {
-        // Dead ??
-        if (currentHealth <= 0)
-        {
-            dead = true;
-            currentHealth = 0;
-            EnemyHealth(0);
-        }
         // Attacking ??
         if (attacking)
         {
@@ -76,13 +64,9 @@ public class EnemyAI : MonoBehaviour
             attacking = false;
             attackTime = attackAgain;
         }
-    }
-
-    public void EnemyHealth(int damage)
-    {
         MeshCollider realenemy = transform.gameObject.GetComponent<MeshCollider>();
-        currentHealth -= damage;
-        if (dead)
+        bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+        if (dDead)
         {
             Destroy(realenemy);
             ragDoll.SetActive(true);
@@ -93,6 +77,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+
     void isLooking()
     {
         if(Physics.Raycast(head.position, head.forward, out look, lookLength))
@@ -109,7 +94,8 @@ public class EnemyAI : MonoBehaviour
     {
         // If you are Chased but he doesnt see you in the SenseField he will Chase you for a X Amount of Seconds  
         agent = this.GetComponent<NavMeshAgent>();
-        if (chasing && !senseField && !dead)
+        bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+        if (chasing && !senseField && !dDead)
         {
             thinkTimer -= Time.deltaTime;
             agent.SetDestination(player.position);
@@ -124,7 +110,6 @@ public class EnemyAI : MonoBehaviour
     }
     public void WalkArea()
     {
-        // 
         agent = this.GetComponent<NavMeshAgent>();
         destPoint++;
         if (destPoint >= points.Length)
@@ -138,7 +123,8 @@ public class EnemyAI : MonoBehaviour
     {
         // Chasing Player
         agent = this.GetComponent<NavMeshAgent>();
-        if (chasing && !dead)
+        bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+        if (chasing && !dDead)
         {
             agent.SetDestination(player.position);
         }
@@ -148,14 +134,18 @@ public class EnemyAI : MonoBehaviour
         // AI is attacking
         if (Physics.Raycast(head.position, head.forward, out attack, attackLength))
         {
-            if (!attacking)
+            bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+            if (!dDead)
             {
-                if (attack.transform.tag == "Player")
+                if (!attacking)
                 {
-                    attack.transform.gameObject.GetComponent<HealthManager>().Health(damage);
-                    attacking = true;
+                    if (attack.transform.tag == "Player")
+                    {
+                        attack.transform.gameObject.GetComponent<HealthManager>().Health(damage);
+                        attacking = true;
+                    }
+                    // Optional Attacking Citizens
                 }
-                // Optional Attacking Citizens
             }
         }
             Debug.DrawRay(head.position, head.forward * 3, Color.red);
