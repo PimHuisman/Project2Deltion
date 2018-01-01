@@ -17,6 +17,8 @@ public class ToolbarWeapon : Editor
 
     private SerializedProperty maxClip;
     private SerializedProperty currentClipAmount;
+    private SerializedProperty outofAmmo;
+    private SerializedProperty needtoReload;
 
     private SerializedProperty bloodHole;
     private SerializedProperty houseHole;
@@ -38,6 +40,8 @@ public class ToolbarWeapon : Editor
         ammoText = soTarget.FindProperty("ammoText");
         weaponType = soTarget.FindProperty("weaponType");
         currentAmmo = soTarget.FindProperty("currentAmmo");
+        outofAmmo = soTarget.FindProperty("outofAmmo");
+        needtoReload = soTarget.FindProperty("needtoReload");
         maxAmmo = soTarget.FindProperty("maxAmmo");
         fireAmmo = soTarget.FindProperty("fireAmmo");
         maxClip = soTarget.FindProperty("maxClip");
@@ -64,19 +68,19 @@ public class ToolbarWeapon : Editor
         switch (myTarget.weaponToolbarTop)
         {
             case 0:
-                //myTarget.weaponToolbarBottom = 4;
+                myTarget.weaponToolbarBottom = 4;
                 myTarget.weaponCurrentTab = "AmmoInfo";
                 break;
             case 1:
-                //myTarget.weaponToolbarBottom = 4;
+                myTarget.weaponToolbarBottom = 4;
                 myTarget.weaponCurrentTab = "ClipInfo";
                 break;
             case 2:
-                //myTarget.weaponToolbarBottom = 4;
+                myTarget.weaponToolbarBottom = 4;
                 myTarget.weaponCurrentTab = "RaycastInfo";
                 break;
             case 3:
-                //myTarget.weaponToolbarBottom = 4;
+                myTarget.weaponToolbarBottom = 4;
                 myTarget.weaponCurrentTab = "Bullet/ClipInfo";
                 break;
         }
@@ -98,6 +102,8 @@ public class ToolbarWeapon : Editor
                 EditorGUILayout.PropertyField(currentAmmo);
                 EditorGUILayout.PropertyField(maxAmmo);
                 EditorGUILayout.PropertyField(fireAmmo);
+                EditorGUILayout.PropertyField(outofAmmo);
+                EditorGUILayout.PropertyField(needtoReload);
                 break;
             case "ClipInfo":
                 EditorGUILayout.PropertyField(maxClip);

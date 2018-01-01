@@ -24,6 +24,8 @@ public class ToolbarEnemy : Editor
 
     private SerializedProperty chasing;
     private SerializedProperty player;
+    private SerializedProperty runSpeed;
+    private SerializedProperty walkSpeed;
 
     private SerializedProperty attackLength;
     private SerializedProperty damage;
@@ -51,6 +53,8 @@ public class ToolbarEnemy : Editor
         lookLength = soTarget.FindProperty("lookLength");
         chasing = soTarget.FindProperty("chasing");
         player = soTarget.FindProperty("player");
+        runSpeed = soTarget.FindProperty("runSpeed");
+        walkSpeed = soTarget.FindProperty("walkSpeed");
         attackLength = soTarget.FindProperty("attackLength");
         damage = soTarget.FindProperty("damage");
         attacking = soTarget.FindProperty("attacking");
@@ -134,6 +138,8 @@ public class ToolbarEnemy : Editor
             case "isChasing":
                 EditorGUILayout.PropertyField(chasing);
                 EditorGUILayout.PropertyField(player);
+                EditorGUILayout.PropertyField(walkSpeed);
+                EditorGUILayout.PropertyField(runSpeed);
                 break;
             case "isAttacking":
                 EditorGUILayout.PropertyField(attackLength);

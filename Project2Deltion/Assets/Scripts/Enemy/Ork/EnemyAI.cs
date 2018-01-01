@@ -26,6 +26,8 @@ public class EnemyAI : MonoBehaviour
     //isChasing
     public bool chasing;
     [SerializeField] private Transform player;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float walkSpeed;
     //isAttacking
     private RaycastHit attack;
     [SerializeField] private float attackLength;
@@ -44,6 +46,7 @@ public class EnemyAI : MonoBehaviour
         attackTime = attackAgain;
         agent = this.GetComponent<NavMeshAgent>();
         agent.SetDestination(points[0].position);
+        agent.speed = walkSpeed;
     }
     void Update()
     {
@@ -104,6 +107,7 @@ public class EnemyAI : MonoBehaviour
                 thinkTimer = 0;
                 thinkTimer = maxTimer;
                 chasing = false;
+                agent.speed = walkSpeed;
                 agent.SetDestination(points[destPoint].position);
             }
         }
@@ -127,6 +131,7 @@ public class EnemyAI : MonoBehaviour
         if (chasing && !dDead)
         {
             agent.SetDestination(player.position);
+            agent.speed = runSpeed;
         }
     }
     void isAttacking()

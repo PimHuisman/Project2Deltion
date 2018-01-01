@@ -39,8 +39,11 @@ public class MainWeapons : MonoBehaviour
     private bool fire;
     private float fireTime;
     [SerializeField] private float fireAgain;
-    //
+    //Damage
     [SerializeField] private int damage;
+    //OutofAmmo
+    [SerializeField] GameObject outofAmmo;
+    [SerializeField] GameObject needtoReload;
 
     void Start()
     {
@@ -74,6 +77,27 @@ public class MainWeapons : MonoBehaviour
     {
         // Ammo Text
         ammoText.text = (weaponType + currentClipAmount + "/" + currentAmmo);
+
+        // If you have NO Ammo at all
+        if (currentAmmo <= 0 && currentClipAmount <= 0)
+        {
+            mayFire = false;
+            outofAmmo.SetActive(true);
+        }
+
+        if (currentClipAmount >= maxClip)
+        {
+            currentClipAmount = maxClip;
+        }
+        if (currentAmmo <= 0)
+        {
+            currentAmmo = 0;
+        }
+        if (currentAmmo >= maxAmmo)
+        {
+            currentAmmo = maxAmmo;
+        }
+
         // Check if timeSwitch == true
         if (timeSwitch)
         {
@@ -81,45 +105,36 @@ public class MainWeapons : MonoBehaviour
         }
         if (currentTime <= 0)
         {
-            // If you have NO Ammo at all
-            if (currentAmmo <= 0 && currentClipAmount <= 0)
+            timeSwitch = false;
+            currentTime = reloadTime;
+            int needAmmo = maxClip - currentClipAmount;
+            currentClipAmount += needAmmo;
+            currentAmmo -= needAmmo;
+            mayFire = true;
+            if (currentAmmo < maxClip)
             {
+                currentClipAmount += currentAmmo;
+            }
+            if (currentClipAmount >= maxClip)
+            {
+                currentClipAmount = maxClip;
+            }
+            if (currentClipAmount <= 0)
+            {
+                currentClipAmount = 0;
                 mayFire = false;
             }
-            // If you have Ammo for clip
-            else
+            if (currentClipAmount >= maxClip)
             {
-                timeSwitch = false;
-                currentTime = reloadTime;
-                int needAmmo = maxClip - currentClipAmount;
-                currentClipAmount += needAmmo;
-                currentAmmo -= needAmmo;
-                mayFire = true;
-                if (currentAmmo < maxClip)
-                {
-                    currentClipAmount += currentAmmo;
-                }
-                if (currentClipAmount >= maxClip)
-                {
-                    currentClipAmount = maxClip;
-                }
-                if (currentClipAmount <= 0)
-                {
-                    currentClipAmount = 0;
-                    mayFire = false;
-                }
-                if (currentClipAmount >= maxClip)
-                {
-                    currentClipAmount = maxClip;
-                }
-                if (currentAmmo <= 0)
-                {
-                    currentAmmo = 0;
-                }
-                if (currentAmmo >= maxAmmo)
-                {
-                    currentAmmo = maxAmmo;
-                }
+                currentClipAmount = maxClip;
+            }
+            if (currentAmmo <= 0)
+            {
+                currentAmmo = 0;
+            }
+            if (currentAmmo >= maxAmmo)
+            {
+                currentAmmo = maxAmmo;
             }
         }
     }
@@ -140,7 +155,7 @@ public class MainWeapons : MonoBehaviour
     public void Weapon()
     {
         // Weapon Functions
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
             if (mayFire)
             {
