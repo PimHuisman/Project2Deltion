@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private int health;
     public int currentHealth;
     public bool dead;
+    [SerializeField] private GameObject test;
 
     void Start()
     {
@@ -25,10 +26,10 @@ public class EnemyHealth : MonoBehaviour
         // Dead ??
         if (currentHealth <= 0)
         {
-            // Ork Health
             dead = true;
             currentHealth = 0;
-            //EnemyHealthCheck(0);
+            test.GetComponent<EnemySpawner>().enemyList.Remove(gameObject);
+            Destroy(gameObject, 10f);
         }
     }
 

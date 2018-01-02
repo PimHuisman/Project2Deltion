@@ -6,6 +6,7 @@ public class HealthManager : MonoBehaviour
 {
     [SerializeField] private int currentHealth;
     [SerializeField] private int maxHealth;
+    [SerializeField] private GameObject diePanel;
     private void Start()
     {
         currentHealth = maxHealth;
@@ -16,8 +17,15 @@ public class HealthManager : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
+            Time.timeScale = 0;
+            diePanel.SetActive(true);
+            Cursor.visible = true;
             print("you are Dead!!!!??");
         }
+    }
+    public void ResetLevel()
+    {
+        Time.timeScale = 1;
     }
 }
 

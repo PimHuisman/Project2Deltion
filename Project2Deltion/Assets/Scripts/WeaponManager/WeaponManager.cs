@@ -16,13 +16,22 @@ public class WeaponManager : MonoBehaviour
     {
         scrollWheel = Input.GetAxis("Mouse ScrollWheel")*5;
 
-        //
         if (scrollWheel <0)
         {
             weapons[0].SetActive(true);
             weapons[1].SetActive(false);
         }
         else if (scrollWheel >0)
+        {
+            weapons[1].SetActive(true);
+            weapons[0].SetActive(false);
+        }
+        if (Input.GetButtonDown("1"))
+        {
+            weapons[0].SetActive(true);
+            weapons[1].SetActive(false);
+        }
+        if (Input.GetButtonDown("2"))
         {
             weapons[1].SetActive(true);
             weapons[0].SetActive(false);

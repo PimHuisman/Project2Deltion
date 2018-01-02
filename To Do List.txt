@@ -1,0 +1,22 @@
+Make a spawn script 
+
+When you die pup_up a screen that says you are dead_______(DONE!!!!!)
+
+Make a score system for the (waves/ killes)
+
+Make pick_up for (health/ammo)
+
+Inprove the DogenemyAI script because it is not finished 
+
+Add new models for (Secondary weapon/ork/troll/special weapon)
+
+Make a Start Sceen and a Menu
+
+Make a Pause Window
+
+Put Music in the game 
+
+Put some visuals for the (weapon/enemy/ets.)
+
+
+

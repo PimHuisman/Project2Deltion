@@ -8,13 +8,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumVelocity;
     [SerializeField] private float speedM;
+    [SerializeField] private float runTime;
     private Vector3 movmentVector;
     private Vector3 cameraMovement;
     private Vector3 velocity;
     private Rigidbody feet;
     private int jump = 1;
     private int maxJump;
-    private float currentSpeed;
+    [SerializeField] private float currentSpeed;
+    [SerializeField] private float currentRunTime;
+    private bool upRunTime;
+    private bool downRunTime;
+
 
 
 
@@ -24,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         maxJump = 1;
         currentSpeed = walkSpeed;
         feet = GetComponent<Rigidbody>();
+        currentRunTime = runTime;
 	}
 
 	void Update ()
@@ -35,13 +41,38 @@ public class PlayerMovement : MonoBehaviour
         cameraMovement.y = Input.GetAxis("Mouse X");
         transform.Rotate(cameraMovement *speedM);
 
-        if (Input.GetButtonDown("LeftShift"))
+        if (upRunTime)
         {
-            currentSpeed = runSpeed;
+            currentRunTime += Time.deltaTime;
         }
-        else if (Input.GetButtonUp("LeftShift"))
+        if (currentRunTime >= runTime)
+        {
+            currentRunTime = runTime;
+        }
+        if (currentRunTime <= 0)
         {
             currentSpeed = walkSpeed;
+            currentRunTime = 0;
+            downRunTime = false;
+        }
+        if (currentRunTime > 0)
+        {
+            downRunTime = true;
+        }
+
+        if (Input.GetButton("LeftShift"))
+        {
+            if (downRunTime)
+            {
+                currentSpeed = runSpeed;
+                currentRunTime -= Time.deltaTime;
+            }
+            upRunTime = false;
+        }
+        if (Input.GetButtonUp("LeftShift"))
+        {
+            currentSpeed = walkSpeed;
+            upRunTime = true;
         }
 
         if (Input.GetButtonDown("Jump"))
