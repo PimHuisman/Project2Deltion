@@ -13,10 +13,22 @@ public class EnemySpawner : MonoBehaviour
 
     void Start ()
     {
-        amountofEnemies = 10;
-	}
+        Create();
+    }
 
     void Update()
+    {
+    }
+    public void Check(GameObject enemy)
+    {
+        bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+        if (dDead)
+        {
+            enemyList.Remove(enemy);
+        }
+    }
+
+    void Create()
     {
         ork = amountofEnemies / 10 * 6;
         dog = amountofEnemies / 10 * 3;
@@ -26,23 +38,15 @@ public class EnemySpawner : MonoBehaviour
         {
             for (int i = 0; i < ork; i++)
             {
-                enemyList.Add(enemies[0]);
+                enemyList.Add(Instantiate(enemies[0]));
             }
             for (int i = 0; i < dog; i++)
             {
-                enemyList.Add(enemies[1]);
+                enemyList.Add(Instantiate(enemies[1]));
             }
             for (int i = 0; i < troll; i++)
             {
-                enemyList.Add(enemies[2]);
-            }
-            for (int i = 0; i < enemyList.Count; i++)
-            {
-                Instantiate(enemyList[i], transform.position, transform.rotation);
-            }
-            if (enemyList.Count <= 0)
-            {
-                enemyList.Clear();
+                enemyList.Add(Instantiate(enemies[2]));
             }
         }
     }

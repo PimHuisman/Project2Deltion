@@ -61,7 +61,7 @@ public class ToolbarWeapon : Editor
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
         EditorGUI.BeginChangeCheck();
 
         myTarget.weaponToolbarTop = GUILayout.Toolbar(myTarget.weaponToolbarTop, new string[] { "AmmoInfo", "ClipInfo", "RaycastInfo", "Bullet/ClipInfo" });

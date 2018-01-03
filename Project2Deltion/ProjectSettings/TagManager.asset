@@ -8,6 +8,8 @@ TagManager:
   - House
   - Enemy1
   - WayPoint
+  - HealthPickUp
+  - AmmoPickUp
   layers:
   - Default
   - TransparentFX

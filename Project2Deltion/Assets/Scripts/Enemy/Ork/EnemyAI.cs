@@ -25,13 +25,13 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float lookLength;
     //isChasing
     public bool chasing;
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject player;
     [SerializeField] private float runSpeed;
     [SerializeField] private float walkSpeed;
     //isAttacking
     private RaycastHit attack;
     [SerializeField] private float attackLength;
-    [SerializeField] private int damage;
+    [SerializeField] private float damage;
     [SerializeField] private bool attacking;
     [SerializeField] private float attackAgain;
     private float attackTime;
@@ -101,7 +101,7 @@ public class EnemyAI : MonoBehaviour
         if (chasing && !senseField && !dDead)
         {
             thinkTimer -= Time.deltaTime;
-            agent.SetDestination(player.position);
+            agent.SetDestination(player.transform.position);
             if (thinkTimer <= 0)
             {
                 thinkTimer = 0;
@@ -130,7 +130,7 @@ public class EnemyAI : MonoBehaviour
         bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
         if (chasing && !dDead)
         {
-            agent.SetDestination(player.position);
+            agent.SetDestination(player.transform.position);
             agent.speed = runSpeed;
         }
     }

@@ -7,14 +7,15 @@ public class EnemyHealth : MonoBehaviour
 {
     NavMeshAgent agent;
     // Health
-    [SerializeField] private int health;
-    public int currentHealth;
+    [SerializeField] private float health;
+    public float currentHealth;
     public bool dead;
-    [SerializeField] private GameObject test;
+    private GameObject enemy;
 
     void Start()
     {
         currentHealth = health;
+        enemy = gameObject;
     }
     private void Update()
     {
@@ -23,17 +24,17 @@ public class EnemyHealth : MonoBehaviour
 
     public void isCheck()
     {
-        // Dead ??
         if (currentHealth <= 0)
         {
             dead = true;
             currentHealth = 0;
-            test.GetComponent<EnemySpawner>().enemyList.Remove(gameObject);
             Destroy(gameObject, 10f);
+            transform.gameObject.GetComponent<EnemySpawner>().Check(enemy);
+
         }
     }
 
-    public void EnemyHealthCheck(int damage)
+    public void EnemyHealthCheck(float damage)
     {
         agent = this.GetComponent<NavMeshAgent>();
         currentHealth -= damage;

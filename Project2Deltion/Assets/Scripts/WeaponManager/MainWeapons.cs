@@ -28,7 +28,7 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private float raycastLength;
     [SerializeField] private Transform cameraPosition;
     private RaycastHit hit;
-    private bool mayFire;
+    public bool mayFire;
     //ReloadTimer
     private bool timeSwitch;
     private float currentTime;
@@ -40,10 +40,10 @@ public class MainWeapons : MonoBehaviour
     private float fireTime;
     [SerializeField] private float fireAgain;
     //Damage
-    [SerializeField] private int damage;
+    [SerializeField] private float damage;
     //OutofAmmo
-    [SerializeField] GameObject outofAmmo;
-    [SerializeField] GameObject needtoReload;
+    [SerializeField] private GameObject outofAmmo;
+    [SerializeField] private GameObject needtoReload;
 
     void Start()
     {
@@ -65,13 +65,20 @@ public class MainWeapons : MonoBehaviour
     void Reload()
     {
         // Press R for reload or when it hits zero
-        if (currentClipAmount <= maxAmmo)
+        if (currentClipAmount < maxClip)
         {
-            if (Input.GetButtonDown("R") || currentClipAmount <= 0)
+            if (mayFire)
             {
-                timeSwitch = true;
+                if (Input.GetButtonDown("R") || currentClipAmount <= 0)
+                {
+                    timeSwitch = true;
+                }
             }
         }
+    }
+    public void AddAmmo(int ammo)
+    {
+        currentAmmo += ammo;
     }
     void AmmoCheck()
     {
@@ -83,56 +90,65 @@ public class MainWeapons : MonoBehaviour
         {
             mayFire = false;
             outofAmmo.SetActive(true);
+            needtoReload.SetActive(false);
         }
-
-        if (currentClipAmount >= maxClip)
+        else
         {
-            currentClipAmount = maxClip;
+            outofAmmo.SetActive(false);
         }
-        if (currentAmmo <= 0)
-        {
-            currentAmmo = 0;
-        }
-        if (currentAmmo >= maxAmmo)
-        {
-            currentAmmo = maxAmmo;
-        }
-
         // Check if timeSwitch == true
-        if (timeSwitch)
+        if (mayFire)
         {
-            currentTime -= Time.deltaTime;
+            if (timeSwitch)
+            {
+                currentTime -= Time.deltaTime;
+            }
+        }
+        if (currentClipAmount < maxClip && currentAmmo <= 0)
+        {
+            timeSwitch = false;
+        }
+        // Calculate a Percentage of the hole Clip 
+        int amount = maxClip / 5;
+        if (currentClipAmount <= amount && mayFire)
+        {
+            needtoReload.SetActive(true);
+        }
+        else
+        {
+            needtoReload.SetActive(false);
         }
         if (currentTime <= 0)
         {
+            mayFire = true;
             timeSwitch = false;
             currentTime = reloadTime;
-            int needAmmo = maxClip - currentClipAmount;
-            currentClipAmount += needAmmo;
-            currentAmmo -= needAmmo;
-            mayFire = true;
-            if (currentAmmo < maxClip)
+            if (currentClipAmount >= 0 && currentAmmo < maxClip)
             {
+                int ammoOver = currentAmmo;
                 currentClipAmount += currentAmmo;
+                currentAmmo -= ammoOver;
             }
-            if (currentClipAmount >= maxClip)
+            else
+            {
+                int needAmmo = maxClip - currentClipAmount;
+                currentClipAmount += needAmmo;
+                currentAmmo -= needAmmo;
+            }
+            if (currentClipAmount > maxClip)
             {
                 currentClipAmount = maxClip;
             }
-            if (currentClipAmount <= 0)
+            if (currentClipAmount == 0)
             {
                 currentClipAmount = 0;
                 mayFire = false;
             }
-            if (currentClipAmount >= maxClip)
-            {
-                currentClipAmount = maxClip;
-            }
-            if (currentAmmo <= 0)
+            if (currentAmmo == 0)
             {
                 currentAmmo = 0;
             }
-            if (currentAmmo >= maxAmmo)
+            if (currentAmmo > maxAmmo)
             {
                 currentAmmo = maxAmmo;
             }
@@ -152,7 +168,7 @@ public class MainWeapons : MonoBehaviour
         }
     }
 
-    public void Weapon()
+    void Weapon()
     {
         // Weapon Functions
         if (Input.GetButton("Fire1"))
