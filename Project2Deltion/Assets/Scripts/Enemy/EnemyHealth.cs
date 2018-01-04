@@ -10,12 +10,10 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float health;
     public float currentHealth;
     public bool dead;
-    private GameObject enemy;
 
     void Start()
     {
         currentHealth = health;
-        enemy = gameObject;
     }
     private void Update()
     {
@@ -29,8 +27,6 @@ public class EnemyHealth : MonoBehaviour
             dead = true;
             currentHealth = 0;
             Destroy(gameObject, 10f);
-            transform.gameObject.GetComponent<EnemySpawner>().Check(enemy);
-
         }
     }
 

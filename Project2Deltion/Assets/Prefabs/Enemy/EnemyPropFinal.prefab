@@ -1294,7 +1294,6 @@ MonoBehaviour:
   health: 6
   currentHealth: 0
   dead: 0
-  spawn: {fileID: 1916183286062646, guid: 76cb79076e1dda0469356b087bdebc27, type: 2}
 --- !u!114 &114365538844975726
 MonoBehaviour:
   m_ObjectHideFlags: 1
