@@ -733,7 +733,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768722718546480}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.243357, y: 0.5, z: -12.107529}
+  m_LocalPosition: {x: 1.9606695, y: 0.5, z: -10.31382}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4904098308306958}
@@ -1258,23 +1258,21 @@ MonoBehaviour:
   ragDoll: {fileID: 1238503186791508}
   head: {fileID: 4310139983915410}
   points:
-  - {fileID: 4940773572640998, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4359834706420250, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4872301372309228, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4887597714337340, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4472686242967818, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4673148241844472, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4222470089904614, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  - {fileID: 4623266587998580, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
-  destPoint: 0
+  - {fileID: 4690676081243732, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4765174170240282, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4821625689225136, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4701954585898462, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4314331892321302, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4751782446279250, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4957698307621680, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
+  - {fileID: 4895175760152972, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
   random: 0
   lookLength: 20
   chasing: 0
-  player: {fileID: 1850887554967948, guid: 8db2af7f901e2c6448a794685a9310a4, type: 2}
   runSpeed: 5
   walkSpeed: 3
-  attackLength: 3
-  damage: 2
+  attackLength: 2
+  damage: 25
   attacking: 0
   attackAgain: 0.7
   senseField: 0
@@ -1291,9 +1289,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1ad664c545ddc4dbbfc329f86c05e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 6
+  health: 75
   currentHealth: 0
   dead: 0
+  points: 100
+  killes: 1
 --- !u!114 &114365538844975726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1316,7 +1316,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 7
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135375242555480708
 SphereCollider:

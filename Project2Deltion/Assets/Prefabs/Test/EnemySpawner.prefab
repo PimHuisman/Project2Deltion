@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114886789148399820}
   m_Layer: 0
   m_Name: EnemySpawner
-  m_TagString: Untagged
+  m_TagString: WaveSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,9 +33,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1916183286062646}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.21000004, y: 1.5699997, z: -11.68}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.16800003, y: 1.2559998, z: -9.344001}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -52,11 +52,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies:
-  - {fileID: 1965242817033652, guid: de3ca5f1de706244f9fbe2955a3ed76e, type: 2}
-  - {fileID: 1529875773467822, guid: 65d46c1c935b201449746e1489a0b574, type: 2}
-  - {fileID: 1965242817033652, guid: de3ca5f1de706244f9fbe2955a3ed76e, type: 2}
-  amountofEnemies: 0
+  - {fileID: 1768722718546480, guid: 65d46c1c935b201449746e1489a0b574, type: 2}
+  - {fileID: 1533867913502404, guid: de3ca5f1de706244f9fbe2955a3ed76e, type: 2}
+  - {fileID: 1768722718546480, guid: 65d46c1c935b201449746e1489a0b574, type: 2}
+  amountOfEnemies: 8
+  upEnemies: 5
   ork: 0
   dog: 0
   troll: 0
   enemyList: []
+  orkSpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dogSpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  trollSpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  wave: {fileID: 0}
+  waveAmount: 0
+  kill: {fileID: 0}
+  killes: 0
+  totalEnemies: {fileID: 0}

@@ -17,7 +17,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform head;
     //WalkField
     [SerializeField] private Transform[] points;
-    [SerializeField] private int destPoint;
+    //[SerializeField] private int destPoint;
     [SerializeField] private int random;
     NavMeshAgent agent;
     //LookRaycast
@@ -25,7 +25,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float lookLength;
     //isChasing
     public bool chasing;
-    [SerializeField] private GameObject player;
+    private Transform player;
     [SerializeField] private float runSpeed;
     [SerializeField] private float walkSpeed;
     //isAttacking
@@ -45,8 +45,10 @@ public class EnemyAI : MonoBehaviour
         thinkTimer = maxTimer;
         attackTime = attackAgain;
         agent = this.GetComponent<NavMeshAgent>();
-        agent.SetDestination(points[0].position);
+        Transform destPoint = points[Random.Range(0, points.Length)];
+        agent.SetDestination(destPoint.position);
         agent.speed = walkSpeed;
+        player = GameObject.FindGameObjectWithTag ("Player").transform;
     }
     void Update()
     {
@@ -98,6 +100,7 @@ public class EnemyAI : MonoBehaviour
         // If you are Chased but he doesnt see you in the SenseField he will Chase you for a X Amount of Seconds  
         agent = this.GetComponent<NavMeshAgent>();
         bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+        Transform destPoint = points[Random.Range(0, points.Length)];
         if (chasing && !senseField && !dDead)
         {
             thinkTimer -= Time.deltaTime;
@@ -108,19 +111,15 @@ public class EnemyAI : MonoBehaviour
                 thinkTimer = maxTimer;
                 chasing = false;
                 agent.speed = walkSpeed;
-                agent.SetDestination(points[destPoint].position);
+                agent.SetDestination(destPoint.position);
             }
         }
     }
     public void WalkArea()
     {
         agent = this.GetComponent<NavMeshAgent>();
-        destPoint++;
-        if (destPoint >= points.Length)
-        {
-            destPoint = 0;
-        }
-        agent.SetDestination(points[destPoint].position);
+        Transform destPoint = points[Random.Range(0, points.Length)];
+        agent.SetDestination(destPoint.position);
     }
 
     public void isChasing()
@@ -130,7 +129,7 @@ public class EnemyAI : MonoBehaviour
         bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
         if (chasing && !dDead)
         {
-            agent.SetDestination(player.transform.position);
+            agent.SetDestination(player.position);
             agent.speed = runSpeed;
         }
     }

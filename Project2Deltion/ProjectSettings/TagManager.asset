@@ -10,6 +10,8 @@ TagManager:
   - WayPoint
   - HealthPickUp
   - AmmoPickUp
+  - WaveSystem
+  - ScoreManager
   layers:
   - Default
   - TransparentFX

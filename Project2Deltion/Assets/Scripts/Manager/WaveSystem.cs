@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemySpawner : MonoBehaviour
+public class WaveSystem : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private float amountOfEnemies;
@@ -13,34 +13,30 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float dog;
     [SerializeField] private float troll;
     public List<GameObject> enemyList = new List<GameObject>();
+    public List<Transform> orkSpawnPoints = new List<Transform>();
+    public List<Transform> dogSpawnPoints = new List<Transform>();
+    public List<Transform> trollSpawnPoints = new List<Transform>();
+    // Waves
     [SerializeField] private Text wave;
     [SerializeField] private int waveAmount;
-
-    [SerializeField] private float test1;
-    [SerializeField] private float test2;
-    [SerializeField] private float test3;
+    // Amount Of Enemies
+    [SerializeField] Text totalEnemies;
 
 
     void Start ()
     {
         Create();
+        waveAmount++;
     }
 
     void Update()
     {
-        // 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            enemyList.RemoveAt(0);
-        }
-        // test
+        // Test
         if (Input.GetKeyDown(KeyCode.P))
         {
-            test1 = Mathf.RoundToInt((test1 / 10) * 6);
-            test2 = Mathf.RoundToInt((test2 / 10) * 3);
-            test3 = Mathf.RoundToInt((test3 / 10) * 1);
+            //Test
         }
-
+        totalEnemies.text = ("Left" + "/" + enemyList.Count);
         wave.text = ("Wave" + "/" + waveAmount);
 
         for (int i = 0; i < enemyList.Count; i++)
@@ -61,9 +57,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (waveAmount > 0)
         {
-            amountOfEnemies =Mathf.RoundToInt(amountOfEnemies + upEnemies);
+            amountOfEnemies = Mathf.RoundToInt(amountOfEnemies + upEnemies);
         }
-
+        Transform randomspawnOrk = orkSpawnPoints [Random.Range(0, orkSpawnPoints.Count)];
+        Transform randomspawnDog = dogSpawnPoints [Random.Range(0, dogSpawnPoints.Count)];
+        Transform randomspawnTroll = trollSpawnPoints [Random.Range(0, trollSpawnPoints.Count)];
         if (enemyList.Count < amountOfEnemies)
         {
             ork = Mathf.RoundToInt(amountOfEnemies / 10 * 6);
@@ -72,15 +70,15 @@ public class EnemySpawner : MonoBehaviour
 
             for (int i = 0; i < ork; i++)
             {
-                enemyList.Add(Instantiate(enemies[0]));
+                enemyList.Add(Instantiate(enemies[0], randomspawnOrk.transform));
             }
             for (int i = 0; i < dog; i++)
             {
-                enemyList.Add(Instantiate(enemies[1]));
+                enemyList.Add(Instantiate(enemies[1], randomspawnDog.transform));
             }
             for (int i = 0; i < troll; i++)
             {
-                enemyList.Add(Instantiate(enemies[2]));
+                enemyList.Add(Instantiate(enemies[2], randomspawnTroll.transform));
             }
         }
     }

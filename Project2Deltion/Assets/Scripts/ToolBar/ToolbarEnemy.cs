@@ -23,7 +23,6 @@ public class ToolbarEnemy : Editor
     private SerializedProperty lookLength;
 
     private SerializedProperty chasing;
-    private SerializedProperty player;
     private SerializedProperty runSpeed;
     private SerializedProperty walkSpeed;
 
@@ -52,7 +51,6 @@ public class ToolbarEnemy : Editor
         random = soTarget.FindProperty("random");
         lookLength = soTarget.FindProperty("lookLength");
         chasing = soTarget.FindProperty("chasing");
-        player = soTarget.FindProperty("player");
         runSpeed = soTarget.FindProperty("runSpeed");
         walkSpeed = soTarget.FindProperty("walkSpeed");
         attackLength = soTarget.FindProperty("attackLength");
@@ -67,7 +65,7 @@ public class ToolbarEnemy : Editor
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
         soTarget.Update();
 
         EditorGUI.BeginChangeCheck();
@@ -137,7 +135,6 @@ public class ToolbarEnemy : Editor
                 break;
             case "isChasing":
                 EditorGUILayout.PropertyField(chasing);
-                EditorGUILayout.PropertyField(player);
                 EditorGUILayout.PropertyField(walkSpeed);
                 EditorGUILayout.PropertyField(runSpeed);
                 break;

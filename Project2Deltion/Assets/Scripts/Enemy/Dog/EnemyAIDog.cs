@@ -7,12 +7,23 @@ public class EnemyAIDog : MonoBehaviour
 {
     // NavMeshAgent
     NavMeshAgent agent;
-    [SerializeField] private Transform player;
-    //RagDoll
+    private Transform player;
+    // RagDoll
     [SerializeField] private GameObject[] body;
     [SerializeField] private GameObject ragDoll;
     // isAttaking
     private RaycastHit hit;
+    [SerializeField] private Transform head;
+    [SerializeField] private float attackLength;
+    [SerializeField] private bool attacking;
+    [SerializeField] private float damage;
+    [SerializeField] private float attackAgain;
+    private float attackTime;
+    // isChasing
+    [SerializeField] private bool chasing;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+
     // isThinking
     [SerializeField] private float thinkTimer;
     [SerializeField] private float maxTimer;
@@ -23,6 +34,8 @@ public class EnemyAIDog : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        attackTime = attackAgain;
         walkTimer = maxWalkTimer;
         thinkTimer = maxTimer;
         walking = true;
@@ -30,10 +43,27 @@ public class EnemyAIDog : MonoBehaviour
     }
     void Update()
     {
-        RagDoll();
+
         iswalking();
+        RagDoll();
+        isAttacking();
         isthinking();
+        isChecking();
     }
+    void isChecking()
+    {
+        // Attacking ??
+        if (attacking)
+        {
+            attackTime -= Time.deltaTime;
+        }
+        if (attackTime <= 0)
+        {
+            attacking = false;
+            attackTime = attackAgain;
+        }
+    }
+
     void RagDoll()
     {
         MeshCollider realenemy = transform.gameObject.GetComponent<MeshCollider>();
@@ -51,7 +81,22 @@ public class EnemyAIDog : MonoBehaviour
     }
     void isAttacking()
     {
-        // raycast lenght for attacking 
+        if (Physics.Raycast(head.position, head.forward, out hit, attackLength))
+        {
+            bool dDead = transform.gameObject.GetComponent<EnemyHealth>().dead;
+            if (!dDead)
+            {
+                if (!attacking)
+                {
+                    if (hit.transform.tag == "Player")
+                    {
+                        hit.transform.gameObject.GetComponent<HealthManager>().Health(damage);
+                        attacking = true;
+                    }
+                }
+            }
+        }
+        Debug.DrawRay(head.position, head.forward * attackLength, Color.yellow);
     }
     void iswalking()
     {
@@ -60,7 +105,10 @@ public class EnemyAIDog : MonoBehaviour
     }
     void isChasing()
     {
-        // change speed of dog 
+        if (chasing)
+        {
+            agent.speed = runSpeed;
+        }
     }
     void isthinking()
     {

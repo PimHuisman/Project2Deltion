@@ -9,6 +9,8 @@ public class HealthManager : MonoBehaviour
     [SerializeField] private float maxHealth;
     [SerializeField] private GameObject diePanel;
     public Slider healthSlider;
+    public bool paused;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -27,10 +29,14 @@ public class HealthManager : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Time.timeScale = 0;
             diePanel.SetActive(true);
             Cursor.visible = true;
             print("you are Dead!!!!??");
+            paused = !paused;
+            if (paused)
+            {
+                Time.timeScale = 0;
+            }
         }
     }
     public float CalculateHealth()
