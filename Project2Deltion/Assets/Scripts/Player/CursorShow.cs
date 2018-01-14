@@ -6,14 +6,6 @@ public class CursorShow : MonoBehaviour
 {
 	void Start ()
     {
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
-	
-	void Update ()
-    {
-		if (Input.GetButtonUp("Cancel"))
-        {
-            Cursor.visible = !Cursor.visible;
-        }
-	}
 }

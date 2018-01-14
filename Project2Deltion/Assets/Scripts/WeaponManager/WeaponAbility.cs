@@ -16,7 +16,7 @@ public class WeaponAbility : MonoBehaviour
     [SerializeField] private int maxClipH;
     [SerializeField] private int currentClipAmountH;
     //RayCastBullets
-    [SerializeField] GameObject harpoonHole;
+    [SerializeField] GameObject harpoonTrase;
     private RaycastHit hit;
     private bool bulletHoleH;
 
@@ -35,7 +35,9 @@ public class WeaponAbility : MonoBehaviour
             {
                 Rigidbody bulletInstance;
                 bulletInstance = Instantiate(bullet, barrelEnd.position, barrelEnd.rotation) as Rigidbody;
+                Instantiate(harpoonTrase, barrelEnd.position, barrelEnd.rotation);
                 bulletInstance.velocity = barrelEnd.forward *20;
+
                 currentClipAmountH -= fireAmmoH;
             }
         }

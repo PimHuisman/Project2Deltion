@@ -161,6 +161,5 @@ public class EnemyAI : MonoBehaviour
             WalkArea();
         }
     }
-
 }
 

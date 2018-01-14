@@ -10,7 +10,6 @@ public class MainWeapons : MonoBehaviour
     public int weaponToolbarTop;
     public int weaponToolbarBottom;
     public string weaponCurrentTab;
-
     //Ammo Text
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
@@ -25,8 +24,10 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private GameObject bloodHole;
     [SerializeField] private GameObject houseHole;
     [SerializeField] private GameObject normalHole;
+    [SerializeField] private GameObject muzzelFlash;
     [SerializeField] private float raycastLength;
     [SerializeField] private Transform cameraPosition;
+    [SerializeField] private Transform barrelEnd;
     private RaycastHit hit;
     public bool mayFire;
     //ReloadTimer
@@ -97,12 +98,9 @@ public class MainWeapons : MonoBehaviour
             outofAmmo.SetActive(false);
         }
         // Check if timeSwitch == true
-        if (mayFire)
+        if (timeSwitch)
         {
-            if (timeSwitch)
-            {
-                currentTime -= Time.deltaTime;
-            }
+            currentTime -= Time.deltaTime;
         }
         if (currentClipAmount < maxClip && currentAmmo <= 0)
         {
@@ -184,6 +182,7 @@ public class MainWeapons : MonoBehaviour
                             timeSwitch = false;
                             currentTime = reloadTime;
                         }
+                        //Destroy(Instantiate(muzzelFlash, barrelEnd.position, barrelEnd.rotation),0.1f);
                         currentClipAmount -= fireAmmo;
                         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {

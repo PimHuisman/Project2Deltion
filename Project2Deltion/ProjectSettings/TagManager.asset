@@ -12,6 +12,7 @@ TagManager:
   - AmmoPickUp
   - WaveSystem
   - ScoreManager
+  - Shop
   layers:
   - Default
   - TransparentFX

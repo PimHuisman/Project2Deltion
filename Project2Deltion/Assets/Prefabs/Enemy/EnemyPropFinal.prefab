@@ -1240,9 +1240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e61a5804064d5b448be47ecdc164803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolbarTop: 1
+  toolbarTop: 2
   toolbarBottom: 4
-  currentTab: isChasing
+  currentTab: isAttacking
   body:
   - {fileID: 1469947836492472}
   - {fileID: 1676212650738376}
@@ -1272,7 +1272,7 @@ MonoBehaviour:
   runSpeed: 5
   walkSpeed: 3
   attackLength: 2
-  damage: 25
+  damage: 12
   attacking: 0
   attackAgain: 0.7
   senseField: 0

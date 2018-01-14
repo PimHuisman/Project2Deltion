@@ -25,6 +25,8 @@ public class ToolbarWeapon : Editor
     private SerializedProperty normalHole;
     private SerializedProperty raycastLength;
     private SerializedProperty cameraPosition;
+    private SerializedProperty muzzleFlash;
+    private SerializedProperty barrelEnd;
 
     private SerializedProperty reloadTime;
     private SerializedProperty inpactForce;
@@ -51,6 +53,8 @@ public class ToolbarWeapon : Editor
         normalHole = soTarget.FindProperty("normalHole");
         raycastLength = soTarget.FindProperty("raycastLength");
         cameraPosition = soTarget.FindProperty("cameraPosition");
+        barrelEnd = soTarget.FindProperty("barrelEnd");
+        muzzleFlash = soTarget.FindProperty("muzzelFlash");
         reloadTime = soTarget.FindProperty("reloadTime");
         inpactForce = soTarget.FindProperty("inpactForce");
         fireAgain = soTarget.FindProperty("fireAgain");
@@ -115,6 +119,8 @@ public class ToolbarWeapon : Editor
                 EditorGUILayout.PropertyField(normalHole);
                 EditorGUILayout.PropertyField(raycastLength);
                 EditorGUILayout.PropertyField(cameraPosition);
+                EditorGUILayout.PropertyField(barrelEnd);
+                EditorGUILayout.PropertyField(muzzleFlash);
                 break;
             case "Bullet/ClipInfo":
                 EditorGUILayout.PropertyField(reloadTime);

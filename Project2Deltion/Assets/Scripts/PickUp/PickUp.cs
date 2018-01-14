@@ -42,9 +42,9 @@ public class PickUp : MonoBehaviour
             }
             if (hit.transform.tag == "HealthPickUp")
             {
-                crossHair.SetActive(false);
-                ePickUp.SetActive(true);
                 itemInfo.text = (hit.transform.name);
+                ePickUp.SetActive(true);
+                crossHair.SetActive(false);
                 if (Input.GetButtonDown("E"))
                 {
                     Destroy(hit.transform.gameObject);

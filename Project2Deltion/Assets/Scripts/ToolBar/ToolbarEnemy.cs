@@ -65,7 +65,7 @@ public class ToolbarEnemy : Editor
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
-        DrawDefaultInspector();
+        //DrawDefaultInspector();
         soTarget.Update();
 
         EditorGUI.BeginChangeCheck();

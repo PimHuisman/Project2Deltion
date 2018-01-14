@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private GameObject scoreTab;
     [SerializeField] private int currentKilles;
-    [SerializeField] private int currentPoints;
+    public int currentPoints;
     [SerializeField] private Text killesManager;
     [SerializeField] private Text pointsManager;
 
@@ -28,16 +28,27 @@ public class ScoreManager : MonoBehaviour
         {
             scoreTab.SetActive(false);
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Points(100, 0);
+        }
     }
-
 
     public void Killes(int kill)
     {
         currentKilles += kill;
         killesManager.text = ("Killes" + "/" + currentKilles);
     }
-    public void Points(int point)
+    public void Points(int point, int dPoint)
     {
+        if (currentPoints <= 0)
+        {
+            currentPoints = 0;
+        }
+        if (currentPoints >= dPoint)
+        {
+            currentPoints -= dPoint;
+        }
         currentPoints += point;
         pointsManager.text = ("Points" + "/" + currentPoints);
     }

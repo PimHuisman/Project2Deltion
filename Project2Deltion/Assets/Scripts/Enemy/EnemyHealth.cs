@@ -13,12 +13,14 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private int points;
     [SerializeField] private int killes;
     private Transform score;
+    private Transform deadSore;
     private bool flagCheck;
+    private float deadpoint = 1;
 
     void Start()
     {
         score = GameObject.FindGameObjectWithTag("ScoreManager").transform;
-        print(GameObject.FindGameObjectWithTag("ScoreManager"));
+        deadSore = GameObject.FindGameObjectWithTag("WaveSystem").transform;
         flagCheck = true;
         currentHealth = health;
     }
@@ -44,6 +46,10 @@ public class EnemyHealth : MonoBehaviour
         agent = this.GetComponent<NavMeshAgent>();
         currentHealth -= damage;
     }
+    public void UpEnemyHealth (float upHealth)
+    {
+        health = upHealth * health;
+    }
 
     void Score()
     {
@@ -51,7 +57,8 @@ public class EnemyHealth : MonoBehaviour
         {
             flagCheck = false;
             score.GetComponent<ScoreManager>().Killes(killes);
-            score.GetComponent<ScoreManager>().Points(points);
+            score.GetComponent<ScoreManager>().Points(points,0);
+            deadSore.GetComponent<WaveSystem>().EnemyCheck(deadpoint);
         }
     }
 
