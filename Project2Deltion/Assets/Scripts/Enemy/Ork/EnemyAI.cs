@@ -4,38 +4,32 @@ using UnityEngine.AI;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
-{   
-    //TabInspector
-    [HideInInspector]
-    public int toolbarTop;
-    public int toolbarBottom;
-    public string currentTab;
-    //RagDoll
+{
+    [Header("RagDoll")]//RagDoll
     [SerializeField] private GameObject[] body;
     [SerializeField] private GameObject ragDoll;
-    //?!#.....
+    [Header("?!#.....")]//?!#.....
     [SerializeField] private Transform head;
-    //WalkField
+    [Header("WalkField")]//WalkField
     [SerializeField] private Transform[] points;
-    //[SerializeField] private int destPoint;
     [SerializeField] private int random;
     NavMeshAgent agent;
-    //LookRaycast
+    [Header("LookRayCast")]//LookRaycast
     private RaycastHit look;
     [SerializeField] private float lookLength;
-    //isChasing
+    [Header("isChasing")]//isChasing
     public bool chasing;
     private Transform player;
     [SerializeField] private float runSpeed;
     [SerializeField] private float walkSpeed;
-    //isAttacking
+    [Header("isAttacking")]//isAttacking
     private RaycastHit attack;
     [SerializeField] private float attackLength;
     [SerializeField] private float damage;
     [SerializeField] private bool attacking;
     [SerializeField] private float attackAgain;
     private float attackTime;
-    //isThinking;
+    [Header("isThinking")]//isThinking;
     public bool senseField;
     [SerializeField] private float thinkTimer;
     [SerializeField] private float maxTimer;

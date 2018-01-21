@@ -11,6 +11,7 @@ public class WaveSystem : MonoBehaviour
     [SerializeField] private float amountOfEnemies;
     [SerializeField] private float upEnemies;
     [SerializeField] private float upHealth;
+    [SerializeField] private float downTime;
     // Type enemy
     [SerializeField] private float ork;
     [SerializeField] private float dog;
@@ -22,8 +23,16 @@ public class WaveSystem : MonoBehaviour
     [SerializeField] private Text wave;
     [SerializeField] private int waveAmount;
     private bool flagCheck;
+    [SerializeField] private Transform randomspawnOrk;
+    [SerializeField] private Transform randomspawnDog;
+    [SerializeField] private Transform randomspawnTroll;
     // Amount Of Enemies
     [SerializeField] Text totalEnemies;
+    // SpawnRate
+    [SerializeField] float spawnWait;
+    [SerializeField] float spawnLeastWait;
+    [SerializeField] float spawnMostWait;
+    [SerializeField] bool stop;
 
 
     void Start ()
@@ -32,6 +41,7 @@ public class WaveSystem : MonoBehaviour
         Create();
         waveAmount++;
         currentAmountOfEnemies = amountOfEnemies;
+        StartCoroutine(SpawnRate());
     }
 
     void Update()
@@ -48,6 +58,10 @@ public class WaveSystem : MonoBehaviour
             flagCheck = true;
             CheckEnemy();
         }
+        spawnWait = Random.Range(spawnLeastWait, spawnMostWait);
+        randomspawnOrk = orkSpawnPoints[Random.Range(0, orkSpawnPoints.Count)];
+        randomspawnDog = dogSpawnPoints[Random.Range(0, dogSpawnPoints.Count)];
+        randomspawnTroll = trollSpawnPoints[Random.Range(0, trollSpawnPoints.Count)];
     }
     void CheckEnemy()
     {
@@ -64,6 +78,9 @@ public class WaveSystem : MonoBehaviour
 
             Create();
             waveAmount++;
+            StartCoroutine(SpawnRate());
+            spawnLeastWait = spawnLeastWait / downTime;
+            spawnMostWait = spawnMostWait / downTime;
         }
     }
 
@@ -82,27 +99,35 @@ public class WaveSystem : MonoBehaviour
                 amountOfEnemies = Mathf.RoundToInt(amountOfEnemies + upEnemies);
             }
         }
-
-        Transform randomspawnOrk = orkSpawnPoints [Random.Range(0, orkSpawnPoints.Count)];
-        Transform randomspawnDog = dogSpawnPoints [Random.Range(0, dogSpawnPoints.Count)];
-        Transform randomspawnTroll = trollSpawnPoints [Random.Range(0, trollSpawnPoints.Count)];
+    }
+    IEnumerator SpawnRate()
+    {
 
         ork = Mathf.RoundToInt(amountOfEnemies / 10 * 6);
         dog = Mathf.RoundToInt(amountOfEnemies / 10 * 3);
         troll = Mathf.RoundToInt(amountOfEnemies / 10 * 1);
 
+        yield return new WaitForSeconds(spawnWait);
 
         for (int i = 0; i < ork; i++)
         {
             Instantiate(enemies[0], randomspawnOrk.transform);
+            yield return new WaitForSeconds(spawnWait);
         }
+        yield return new WaitForSeconds(spawnWait);
+
         for (int i = 0; i < dog; i++)
         {
             Instantiate(enemies[1], randomspawnDog.transform);
+            yield return new WaitForSeconds(spawnWait);
         }
+
+        yield return new WaitForSeconds(spawnWait);
+
         for (int i = 0; i < troll; i++)
         {
             Instantiate(enemies[2], randomspawnTroll.transform);
+            yield return new WaitForSeconds(spawnWait);
         }
     }
 }

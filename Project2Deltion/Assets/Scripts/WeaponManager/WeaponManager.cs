@@ -14,6 +14,7 @@ public class WeaponManager : MonoBehaviour
     }
     void Update()
     {
+
         scrollWheel = Input.GetAxis("Mouse ScrollWheel")*5;
 
         if (scrollWheel <0)

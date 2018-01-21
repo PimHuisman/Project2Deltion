@@ -34,7 +34,8 @@ public class ShopSelect : MonoBehaviour
             if (hit.transform.tag == "Shop")
             {
                 string typeOf = hit.transform.GetComponent<Shop>().type;
-                itemInfo.text = (typeOf);
+                string typeInfo = hit.transform.GetComponent<Shop>().info;
+                itemInfo.text = (typeOf + "/" + typeInfo);
                 crossHair.SetActive(false);
                 eShop.SetActive(true);
                 if (Input.GetButtonDown("E"))
@@ -43,7 +44,7 @@ public class ShopSelect : MonoBehaviour
                     string info = hit.transform.GetComponent<Shop>().info;
                     if (typeOf == type[0])
                     {
-                        if (gun[0] && info == "Musket")
+                        if (info == "Musket")
                         {
                             if (currentpoints > 0)
                             {
@@ -54,7 +55,7 @@ public class ShopSelect : MonoBehaviour
                             score.GetComponent<ScoreManager>().Points(0, downPoints);
                             gun[0].GetComponent<MainWeapons>().mayFire = true;
                         }
-                        if (gun[1] && info == "Shotgun")
+                        if (info == "Shotgun")
                         {
                             if (currentpoints > 0)
                             {
@@ -72,7 +73,7 @@ public class ShopSelect : MonoBehaviour
                     }
                     if (typeOf == type[2])
                     {
-                        if (gun[1] && info == "Experimental")
+                        if (info == "Experimental")
                         {
                             if (currentpoints > 0)
                             {

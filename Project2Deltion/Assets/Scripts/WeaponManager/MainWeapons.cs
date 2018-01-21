@@ -5,22 +5,17 @@ using UnityEngine.UI;
 
 public class MainWeapons : MonoBehaviour
 {
-    //ToolbarWeapon
-    [HideInInspector]
-    public int weaponToolbarTop;
-    public int weaponToolbarBottom;
-    public string weaponCurrentTab;
-    //Ammo Text
+    [Header("Ammo Text")]
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
-    //Ammo
+    [Header("Ammo")]
     public int currentAmmo;
     [SerializeField] private int maxAmmo;
     [SerializeField] private int fireAmmo;
-    //Clip (Magazine)
+    [Header("Clip (Magazine)")]
     [SerializeField] private int maxClip;
     [SerializeField] private int currentClipAmount;
-    //RayCastBullets
+    [Header("RayCastBullets")]
     [SerializeField] private GameObject bloodHole;
     [SerializeField] private GameObject houseHole;
     [SerializeField] private GameObject normalHole;
@@ -29,20 +24,20 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private Transform cameraPosition;
     [SerializeField] private Transform barrelEnd;
     private RaycastHit hit;
+    [Header("ReloadTimer")]
     public bool mayFire;
-    //ReloadTimer
     private bool timeSwitch;
     private float currentTime;
     [SerializeField] private float reloadTime;
-    //AddForce
+    [Header("AddForce")]
     [SerializeField] private float inpactForce;
-    //FireRate
+    [Header("FireRate")]
     private bool fire;
     private float fireTime;
     [SerializeField] private float fireAgain;
-    //Damage
+    [Header("Damage")]
     [SerializeField] private float damage;
-    //OutofAmmo
+    [Header("OutofAmmo")]
     [SerializeField] private GameObject outofAmmo;
     [SerializeField] private GameObject needtoReload;
 
