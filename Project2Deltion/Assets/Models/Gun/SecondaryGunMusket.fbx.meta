@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b329a12db7bf5464c81cae5f4e91be23
-timeCreated: 1516697764
+guid: f497248e58bb6b04fb53c9a9d67863e5
+timeCreated: 1516568627
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -10,7 +10,7 @@ ModelImporter:
     2100000: Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Musket
+    4300000: MusketShotGun
   externalObjects: {}
   materials:
     importMaterials: 1

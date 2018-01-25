@@ -25,8 +25,8 @@ public class WeaponManager : MonoBehaviour
         }
         else if (scrollWheel >0)
         {
-            weapons[1].SetActive(true);
             weapons[0].SetActive(false);
+            weapons[1].SetActive(true);
             weapons[2].SetActive(false);
         }
         if (Input.GetButtonDown("1"))
@@ -37,14 +37,14 @@ public class WeaponManager : MonoBehaviour
         }
         if (Input.GetButtonDown("2"))
         {
-            weapons[1].SetActive(true);
             weapons[0].SetActive(false);
+            weapons[1].SetActive(true);
             weapons[2].SetActive(false);
         }
         if (Input.GetButtonDown("F"))
         {
+            weapons[0].SetActive(true);
             weapons[1].SetActive(false);
-            weapons[0].SetActive(false);
             weapons[2].SetActive(true);
         }
     }

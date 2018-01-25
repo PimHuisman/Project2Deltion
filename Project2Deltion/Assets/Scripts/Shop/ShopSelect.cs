@@ -91,7 +91,7 @@ public class ShopSelect : MonoBehaviour
         else
         {
             eShop.SetActive(false);
-            crossHair.SetActive(true);
+            //crossHair.SetActive(true);
         }
         Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 2, Color.blue);
     }

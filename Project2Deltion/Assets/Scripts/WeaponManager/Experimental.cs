@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Experimental : MonoBehaviour
 {
-    public float delay;
     public float radius;
     public float force;
 
@@ -15,21 +14,14 @@ public class Experimental : MonoBehaviour
 
     [SerializeField] private float damage;
 
-	void Start ()
+    private void OnCollisionEnter(Collision collision)
     {
-        countDown = delay;
-	}
-
-	void Update ()
-    {
-        countDown -= Time.deltaTime;
-
-        if (countDown <= 0 && !hasExplode)
+        if (collision.gameObject && !hasExplode)
         {
             Explode();
             hasExplode = true;
         }
-	}
+    }
 
     void Explode()
     {

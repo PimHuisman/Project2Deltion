@@ -8,6 +8,14 @@ public class MainWeapons : MonoBehaviour
     [Header("Ammo Text")]
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
+    [Header("Sound")]
+    [SerializeField] private AudioClip shoot;
+    private AudioSource audioSourse;
+    [SerializeField] private AudioSource reloading;
+    [SerializeField] private AudioSource unknown;
+    [Header("Animation")]
+    private Animator aim;
+    [SerializeField] private GameObject crossHair;
     [Header("Ammo")]
     public int currentAmmo;
     [SerializeField] private int maxAmmo;
@@ -43,6 +51,8 @@ public class MainWeapons : MonoBehaviour
 
     void Start()
     {
+        aim = this.GetComponent<Animator>();
+        audioSourse = GetComponent<AudioSource>();
         currentClipAmount = maxClip;
         currentAmmo = maxAmmo;
         currentTime = reloadTime;
@@ -57,6 +67,7 @@ public class MainWeapons : MonoBehaviour
         Weapon();
         Reload();
         FireRate();
+        Animation();
     }
     void Reload()
     {
@@ -179,6 +190,7 @@ public class MainWeapons : MonoBehaviour
                         }
                         //Destroy(Instantiate(muzzelFlash, barrelEnd.position, barrelEnd.rotation),0.1f);
                         currentClipAmount -= fireAmmo;
+                        audioSourse.PlayOneShot(shoot);
                         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {
                             if (hit.transform.tag != null)
@@ -211,6 +223,18 @@ public class MainWeapons : MonoBehaviour
             }
             fire = true;
             Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 10, Color.red);
+        }
+    }
+
+    void Animation()
+    {
+        if (Input.GetButton("Fire2"))
+        {
+            aim.SetBool("isAiming", true);
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            aim.SetBool("isAiming", false);
         }
     }
 }

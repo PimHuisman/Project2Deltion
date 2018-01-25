@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b329a12db7bf5464c81cae5f4e91be23
-timeCreated: 1516697764
+guid: b43c503c11fd7a64680a94bb36cd2940
+timeCreated: 1516697640
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -10,7 +10,7 @@ ModelImporter:
     2100000: Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Musket
+    4300000: Musket.001
   externalObjects: {}
   materials:
     importMaterials: 1
