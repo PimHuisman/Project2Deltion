@@ -9,10 +9,13 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
     [Header("Sound")]
-    [SerializeField] private AudioClip shoot;
     private AudioSource audioSourse;
+    [SerializeField] private AudioClip shoot;
     [SerializeField] private AudioSource reloading;
     [SerializeField] private AudioSource unknown;
+    [Header("Recoil")]
+    private Transform recoilT;
+    [SerializeField] private Vector3 recoil;
     [Header("Animation")]
     private Animator aim;
     [SerializeField] private GameObject crossHair;
@@ -24,14 +27,14 @@ public class MainWeapons : MonoBehaviour
     [SerializeField] private int maxClip;
     [SerializeField] private int currentClipAmount;
     [Header("RayCastBullets")]
+    private RaycastHit hit;
+    [SerializeField] private float raycastLength;
     [SerializeField] private GameObject bloodHole;
     [SerializeField] private GameObject houseHole;
     [SerializeField] private GameObject normalHole;
     [SerializeField] private GameObject muzzelFlash;
-    [SerializeField] private float raycastLength;
     [SerializeField] private Transform cameraPosition;
     [SerializeField] private Transform barrelEnd;
-    private RaycastHit hit;
     [Header("ReloadTimer")]
     public bool mayFire;
     private bool timeSwitch;
@@ -40,9 +43,9 @@ public class MainWeapons : MonoBehaviour
     [Header("AddForce")]
     [SerializeField] private float inpactForce;
     [Header("FireRate")]
+    [SerializeField] private float fireAgain;
     private bool fire;
     private float fireTime;
-    [SerializeField] private float fireAgain;
     [Header("Damage")]
     [SerializeField] private float damage;
     [Header("OutofAmmo")]
@@ -51,6 +54,8 @@ public class MainWeapons : MonoBehaviour
 
     void Start()
     {
+        Transform camera = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        recoilT = camera.GetComponent<Transform>();
         aim = this.GetComponent<Animator>();
         audioSourse = GetComponent<AudioSource>();
         currentClipAmount = maxClip;
@@ -188,9 +193,10 @@ public class MainWeapons : MonoBehaviour
                             timeSwitch = false;
                             currentTime = reloadTime;
                         }
-                        //Destroy(Instantiate(muzzelFlash, barrelEnd.position, barrelEnd.rotation),0.1f);
                         currentClipAmount -= fireAmmo;
+                        //muzzelFlash.SetActive(true);
                         audioSourse.PlayOneShot(shoot);
+                        recoilT.Rotate(recoil);
                         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {
                             if (hit.transform.tag != null)

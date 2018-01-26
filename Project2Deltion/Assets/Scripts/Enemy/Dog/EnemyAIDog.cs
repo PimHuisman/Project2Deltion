@@ -76,6 +76,7 @@ public class EnemyAIDog : MonoBehaviour
             for (int i = 0; i < body.Length; i++)
             {
                 body[i].transform.GetComponent<Rigidbody>().isKinematic = false;
+                body[i].transform.GetComponent<Rigidbody>().WakeUp();
             }
         }
     }

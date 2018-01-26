@@ -43,7 +43,7 @@ public class WeaponManager : MonoBehaviour
         }
         if (Input.GetButtonDown("F"))
         {
-            weapons[0].SetActive(true);
+            weapons[0].SetActive(false);
             weapons[1].SetActive(false);
             weapons[2].SetActive(true);
         }
