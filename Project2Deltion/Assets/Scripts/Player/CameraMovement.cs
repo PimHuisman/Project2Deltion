@@ -6,12 +6,6 @@ public class CameraMovement : MonoBehaviour
 {
     private Vector3 v02;
     public float speed;
-    void Start ()
-    {
-		
-	}
-
-
     void Update()
     {
         v02.x = -Input.GetAxis("Mouse Y");

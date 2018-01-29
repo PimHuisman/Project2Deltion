@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SpawnPickUp : MonoBehaviour
 {
-    [SerializeField] private float timer;
+    public float randomTime;
+    public bool randomOne;
     [SerializeField] private float currentTime;
     [SerializeField] private float leastTime;
     [SerializeField] private float mostTime;
@@ -16,17 +17,22 @@ public class SpawnPickUp : MonoBehaviour
     [SerializeField] private string info;
     [SerializeField] private string type;
 
-
-    void Start ()
+    void Start()
     {
-        currentTime = timer;
-	}
-	
-	void Update ()
+        RandomTime();
+    }
+
+    void Update ()
     {
         Timer();
     }
-    
+
+    void RandomTime()
+    {
+        randomTime = Random.Range(leastTime, mostTime);
+        currentTime = randomTime;
+    }
+
     void Timer()
     {
         currentTime -= Time.deltaTime;
@@ -45,7 +51,13 @@ public class SpawnPickUp : MonoBehaviour
             int randomPickup = Random.Range(0,pickUp.Length);
             randomSpawnPoints = spawnPoints[Random.Range(0, spawnPoints.Length)];
             Instantiate(pickUp[randomPickup], randomSpawnPoints.transform);
-            currentTime = timer;
+
+            if(randomOne)
+            {
+                RandomTime();
+                randomOne = false;
+            }
+            currentTime = randomTime;
         }
     }
 }

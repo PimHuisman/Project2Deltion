@@ -125,5 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae052f4c0cbd2e8439a154f0ed8741e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyTime: 30
   ammo: 10
   type: Musket

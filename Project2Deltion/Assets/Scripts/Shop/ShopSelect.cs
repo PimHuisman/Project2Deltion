@@ -12,17 +12,14 @@ public class ShopSelect : MonoBehaviour
     public List<string> type = new List<string>();
     [SerializeField] GameObject[] gun;
     [SerializeField] private GameObject eShop;
-    [SerializeField] private GameObject crossHair;
     private Transform score;
 
     void Start ()
     {
-        crossHair.SetActive(true);
-        score = GameObject.FindGameObjectWithTag("ScoreManager").transform;
-        
+        score = GameObject.FindGameObjectWithTag("ScoreManager").transform;      
     }
 
-	void Update ()
+	void FixedUpdate ()
     {
         Shop();
     }
@@ -35,18 +32,17 @@ public class ShopSelect : MonoBehaviour
             {
                 string typeOf = hit.transform.GetComponent<Shop>().type;
                 string typeInfo = hit.transform.GetComponent<Shop>().info;
-                itemInfo.text = (typeOf + "/" + typeInfo);
-                crossHair.SetActive(false);
+                int points = hit.transform.GetComponent<Shop>().points;
+                itemInfo.text = (typeInfo + "(" + points + ")" );
                 eShop.SetActive(true);
                 if (Input.GetButtonDown("E"))
                 {
                     int currentpoints = score.GetComponent<ScoreManager>().currentPoints;
-                    string info = hit.transform.GetComponent<Shop>().info;
                     if (typeOf == type[0])
                     {
-                        if (info == "Musket")
+                        if (typeInfo == "Musket")
                         {
-                            if (currentpoints > 0)
+                            if (currentpoints >= points)
                             {
                                 int upAmmo = hit.transform.GetComponent<Shop>().amount;
                                 gun[0].GetComponent<MainWeapons>().AddAmmo(upAmmo);
@@ -55,9 +51,9 @@ public class ShopSelect : MonoBehaviour
                             score.GetComponent<ScoreManager>().Points(0, downPoints);
                             gun[0].GetComponent<MainWeapons>().mayFire = true;
                         }
-                        if (info == "Shotgun")
+                        if (typeInfo == "Shotgun")
                         {
-                            if (currentpoints > 0)
+                            if (currentpoints >= points)
                             {
                                 int upAmmo = hit.transform.GetComponent<Shop>().amount;
                                 gun[1].GetComponent<MainWeapons>().AddAmmo(upAmmo);
@@ -73,9 +69,9 @@ public class ShopSelect : MonoBehaviour
                     }
                     if (typeOf == type[2])
                     {
-                        if (info == "Experimental")
+                        if (typeInfo == "Experimental")
                         {
-                            if (currentpoints > 0)
+                            if (currentpoints >= points)
                             {
                                 int upAmmo = hit.transform.GetComponent<Shop>().amount;
                                 gun[2].GetComponent<MainWeapons>().AddAmmo(upAmmo);
@@ -91,7 +87,6 @@ public class ShopSelect : MonoBehaviour
         else
         {
             eShop.SetActive(false);
-            //crossHair.SetActive(true);
         }
         Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 2, Color.blue);
     }

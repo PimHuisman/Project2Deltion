@@ -13,8 +13,24 @@ public class HealthManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         currentHealth = maxHealth;
         healthSlider.value = CalculateHealth();
+    }
+    void Update()
+    {
+        if (currentHealth <= 0)
+        {
+            paused = !paused;
+            if (paused)
+            {
+                Time.timeScale = 0;
+            }
+            currentHealth = 0;
+            diePanel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            print("you are Dead!!!!??");
+        }
     }
     public void UpHealth(float health)
     {
@@ -26,18 +42,6 @@ public class HealthManager : MonoBehaviour
         //Check for Health 
         currentHealth -= damage;
         healthSlider.value = CalculateHealth();
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            diePanel.SetActive(true);
-            Cursor.visible = true;
-            print("you are Dead!!!!??");
-            paused = !paused;
-            if (paused)
-            {
-                Time.timeScale = 0;
-            }
-        }
     }
     public float CalculateHealth()
     {

@@ -5,65 +5,107 @@ using UnityEngine.UI;
 
 public class MainWeapons : MonoBehaviour
 {
-    [Header("Ammo Text")]
+    [Header("Text/Gameobject")]
     [SerializeField] private Text ammoText;
     [SerializeField] private string weaponType;
+    [SerializeField] private GameObject outofAmmo;
+    [SerializeField] private GameObject needtoReload;
+    [SerializeField] private Text reloadText;
+    [SerializeField] private GameObject reloadSlider;
+    [SerializeField] private Slider reload;
+    [SerializeField] private string timerReload;
+
     [Header("Sound")]
     private AudioSource audioSourse;
     [SerializeField] private AudioClip shoot;
     [SerializeField] private AudioSource reloading;
-    [SerializeField] private AudioSource unknown;
+
+    [Header("Aiming")]
+    private Camera cameraFOV;
+    private bool aiming;
+    private float defaultFOV;
+    private float aimFOV;
+    [SerializeField] private Vector3 normalPos;
+    [SerializeField] private Vector3 aimingPos;
+    [SerializeField] private float changeFOV;
+    [SerializeField] private float fovSpeed;
+
+    [Header("Sway")]
+    private Vector3 newSwayPosition;
+    [SerializeField] private float xSwayAmount;
+    [SerializeField] private float ySwayAmount;
+    [SerializeField] private float xSwayMax;
+    [SerializeField] private float ySwayMax;
+    [SerializeField] private float swaySmoothAmount;
+
     [Header("Recoil")]
     private Transform recoilT;
+    [SerializeField] private GameObject weaponObject;
     [SerializeField] private Vector3 recoil;
-    [Header("Animation")]
-    private Animator aim;
+    [SerializeField] private float recoilAmount;
+    [SerializeField] private float aimSpeed;
+
+    [Header("CrossHair")]
     [SerializeField] private GameObject crossHair;
+
     [Header("Ammo")]
     public int currentAmmo;
     [SerializeField] private int maxAmmo;
     [SerializeField] private int fireAmmo;
+
     [Header("Clip (Magazine)")]
     [SerializeField] private int maxClip;
     [SerializeField] private int currentClipAmount;
+
     [Header("RayCastBullets")]
     private RaycastHit hit;
     [SerializeField] private float raycastLength;
     [SerializeField] private GameObject bloodHole;
     [SerializeField] private GameObject houseHole;
     [SerializeField] private GameObject normalHole;
-    [SerializeField] private GameObject muzzelFlash;
     [SerializeField] private Transform cameraPosition;
     [SerializeField] private Transform barrelEnd;
+
+    [Header("muzzelFlash")]
+    private float muzzelFlashTimer;
+    [SerializeField] private GameObject muzzelFlash;
+    [SerializeField] private bool muzzelFlachEnabled;
+    [SerializeField] private float muzzelFlashTimerStart;
+
     [Header("ReloadTimer")]
     public bool mayFire;
     private bool timeSwitch;
     private float currentTime;
     [SerializeField] private float reloadTime;
+
     [Header("AddForce")]
     [SerializeField] private float inpactForce;
+
     [Header("FireRate")]
     [SerializeField] private float fireAgain;
     private bool fire;
     private float fireTime;
+
     [Header("Damage")]
     [SerializeField] private float damage;
-    [Header("OutofAmmo")]
-    [SerializeField] private GameObject outofAmmo;
-    [SerializeField] private GameObject needtoReload;
+
 
     void Start()
     {
         Transform camera = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        cameraFOV =  camera.GetComponent<Camera>();
         recoilT = camera.GetComponent<Transform>();
-        aim = this.GetComponent<Animator>();
         audioSourse = GetComponent<AudioSource>();
-        currentClipAmount = maxClip;
-        currentAmmo = maxAmmo;
-        currentTime = reloadTime;
         mayFire = true;
         timeSwitch = false;
         fire = false;
+        aimFOV = cameraFOV.fieldOfView - changeFOV; // Get Aim FOV
+        defaultFOV = cameraFOV.fieldOfView; // Get Default FOV
+        muzzelFlashTimer = muzzelFlashTimerStart;
+        reload.value = CalculateTime();
+        currentClipAmount = maxClip;
+        currentTime = reloadTime;
+        currentAmmo = maxAmmo;
         fireTime = fireAgain;
     }
     void Update()
@@ -71,9 +113,16 @@ public class MainWeapons : MonoBehaviour
         AmmoCheck();
         Weapon();
         Reload();
+        ReloadTimer();
         FireRate();
-        Animation();
+        MuzzelFlash();
     }
+    void FixedUpdate()
+    {
+        WeaponSway();
+        isAiming();
+    }
+
     void Reload()
     {
         // Press R for reload or when it hits zero
@@ -81,17 +130,44 @@ public class MainWeapons : MonoBehaviour
         {
             if (mayFire)
             {
+                int amount = maxClip / 5;
                 if (Input.GetButtonDown("R") || currentClipAmount <= 0)
                 {
+                    needtoReload.SetActive(false);
+                    reloadSlider.SetActive(true);
                     timeSwitch = true;
+                }
+                else if (currentClipAmount <= amount && mayFire)
+                {
+                    needtoReload.SetActive(true);
+                }
+                else
+                {
+                    needtoReload.SetActive(false);
                 }
             }
         }
     }
+
+    void ReloadTimer()
+    {
+        if (timeSwitch)
+        {
+            currentTime -= Time.deltaTime;
+            reloadText.text = (timerReload);
+            reload.value = CalculateTime();
+        }
+    }
+    float CalculateTime()
+    {
+        return currentTime / reloadTime;
+    }
+
     public void AddAmmo(int ammo)
     {
         currentAmmo += ammo;
     }
+
     void AmmoCheck()
     {
         // Ammo Text
@@ -103,32 +179,20 @@ public class MainWeapons : MonoBehaviour
             mayFire = false;
             outofAmmo.SetActive(true);
             needtoReload.SetActive(false);
+            reloadSlider.SetActive(false);
         }
         else
         {
             outofAmmo.SetActive(false);
         }
         // Check if timeSwitch == true
-        if (timeSwitch)
-        {
-            currentTime -= Time.deltaTime;
-        }
         if (currentClipAmount < maxClip && currentAmmo <= 0)
         {
             timeSwitch = false;
         }
-        // Calculate a Percentage of the hole Clip 
-        int amount = maxClip / 5;
-        if (currentClipAmount <= amount && mayFire)
-        {
-            needtoReload.SetActive(true);
-        }
-        else
-        {
-            needtoReload.SetActive(false);
-        }
         if (currentTime <= 0)
         {
+            reloadSlider.SetActive(false);
             mayFire = true;
             timeSwitch = false;
             currentTime = reloadTime;
@@ -164,6 +228,20 @@ public class MainWeapons : MonoBehaviour
         }
     }
 
+    void MuzzelFlash()
+    {
+        if (muzzelFlachEnabled)
+        {
+            muzzelFlashTimer -= Time.deltaTime;
+        }
+        if (muzzelFlashTimer <= 0)
+        {
+            muzzelFlashTimer = muzzelFlashTimerStart;
+            muzzelFlachEnabled = false;
+            muzzelFlash.SetActive(false);
+        }
+    }
+
     void FireRate()
     {
         if (fire)
@@ -191,12 +269,19 @@ public class MainWeapons : MonoBehaviour
                         if (timeSwitch)
                         {
                             timeSwitch = false;
+                            reloadSlider.SetActive(false);
                             currentTime = reloadTime;
                         }
                         currentClipAmount -= fireAmmo;
-                        //muzzelFlash.SetActive(true);
+                        muzzelFlash.SetActive(true);
+                        muzzelFlachEnabled = true;
+
+                        // Recoil Movement
+                        Vector3 weaponLocalPosition = weaponObject.transform.localPosition;
+                        weaponLocalPosition.z = weaponLocalPosition.z -= recoilAmount;
+                        weaponObject.transform.localPosition = weaponLocalPosition;
                         audioSourse.PlayOneShot(shoot);
-                        recoilT.Rotate(recoil);
+
                         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
                         {
                             if (hit.transform.tag != null)
@@ -224,24 +309,64 @@ public class MainWeapons : MonoBehaviour
                                 hit.rigidbody.AddForce(-hit.normal * inpactForce);
                             }
                         }
+                        recoilT.Rotate(recoil);
                     }
                 }
             }
             fire = true;
             Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 10, Color.red);
         }
-    }
-
-    void Animation()
-    {
         if (Input.GetButton("Fire2"))
         {
-            aim.SetBool("isAiming", true);
+            aiming = true;
         }
         if (Input.GetButtonUp("Fire2"))
         {
-            aim.SetBool("isAiming", false);
+            aiming = false;
         }
     }
+
+    void WeaponSway()
+    {
+        float x = Input.GetAxis("Mouse X") * xSwayAmount;
+        float y = Input.GetAxis("Mouse Y") * ySwayAmount;
+
+        if (x > xSwayMax)
+        {
+            x = xSwayMax;
+        }
+        if (x < -xSwayMax)
+        {
+            x = -xSwayMax;
+        }
+        if (y > ySwayMax)
+        {
+            y = xSwayMax;
+        }
+        if (y < -ySwayMax)
+        {
+            y = -ySwayMax;
+        }
+
+        Vector3 detection = new Vector3(newSwayPosition.x + x, newSwayPosition.y + y, newSwayPosition.z);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, detection, Time.deltaTime * swaySmoothAmount);
+    }
+
+    void isAiming()
+    {
+        if (aiming)
+        {
+            crossHair.SetActive(false);
+            weaponObject.transform.localPosition = Vector3.Lerp(weaponObject.transform.localPosition, aimingPos, Time.deltaTime * aimSpeed);
+            cameraFOV.fieldOfView = Mathf.Lerp(cameraFOV.fieldOfView, aimFOV, Time.deltaTime * fovSpeed);
+        }
+        else
+        {
+            crossHair.SetActive(true);
+            weaponObject.transform.localPosition = Vector3.Lerp(weaponObject.transform.localPosition, normalPos, Time.deltaTime * aimSpeed);
+            cameraFOV.fieldOfView = Mathf.Lerp(cameraFOV.fieldOfView, defaultFOV, Time.deltaTime * fovSpeed);
+        }
+    }
+
 }
 

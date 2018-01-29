@@ -9,18 +9,21 @@ public class PickUp : MonoBehaviour
     [SerializeField] private Transform cameraPosition;
     [SerializeField] private float raycastLength;
     [SerializeField] private GameObject ePickUp;
-    [SerializeField] private GameObject crossHair;
     [SerializeField] private GameObject[] gun;
     [SerializeField] private Text itemInfo;
     void Update()
+    {
+        Pickup();
+    }
+
+    void Pickup()
     {
         if (Physics.Raycast(cameraPosition.position, cameraPosition.forward, out hit, raycastLength))
         {
             if (hit.transform.tag == "AmmoPickUp")
             {
                 string typeOf = hit.transform.GetComponent<AmmoPickUp>().type;
-                itemInfo.text = (hit.transform.name + typeOf);
-                crossHair.SetActive(false);
+                itemInfo.text = (typeOf);
                 ePickUp.SetActive(true);
                 if (Input.GetButtonDown("E"))
                 {
@@ -44,7 +47,6 @@ public class PickUp : MonoBehaviour
             {
                 itemInfo.text = (hit.transform.name);
                 ePickUp.SetActive(true);
-                crossHair.SetActive(false);
                 if (Input.GetButtonDown("E"))
                 {
                     Destroy(hit.transform.gameObject);
@@ -55,9 +57,9 @@ public class PickUp : MonoBehaviour
         }
         else
         {
-            crossHair.SetActive(true);
             ePickUp.SetActive(false);
         }
         Debug.DrawRay(cameraPosition.position, cameraPosition.forward * 2, Color.blue);
     }
 }
+

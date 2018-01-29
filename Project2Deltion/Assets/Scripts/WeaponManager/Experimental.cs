@@ -14,6 +14,10 @@ public class Experimental : MonoBehaviour
 
     [SerializeField] private float damage;
 
+    private void Start()
+    {
+        Destroy(gameObject, 75f);
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject && !hasExplode)

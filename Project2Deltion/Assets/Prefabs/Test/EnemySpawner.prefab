@@ -51,14 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0230289b0bdcee94f9ce64772a94b42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmountOfEnemies: 13
+  currentAmountOfEnemies: 0
   enemies:
   - {fileID: 1768722718546480, guid: 65d46c1c935b201449746e1489a0b574, type: 2}
-  - {fileID: 1533867913502404, guid: de3ca5f1de706244f9fbe2955a3ed76e, type: 2}
+  - {fileID: 1313509662814552, guid: c3deb889e41306944af76a7529a39581, type: 2}
   - {fileID: 1768722718546480, guid: 65d46c1c935b201449746e1489a0b574, type: 2}
   amountOfEnemies: 8
   upEnemies: 5
   upHealth: 1.05
+  downTime: 1.07
   ork: 8
   dog: 4
   troll: 1
@@ -76,4 +77,11 @@ MonoBehaviour:
   - {fileID: 0}
   wave: {fileID: 0}
   waveAmount: 0
+  randomspawnOrk: {fileID: 0}
+  randomspawnDog: {fileID: 0}
+  randomspawnTroll: {fileID: 0}
   totalEnemies: {fileID: 0}
+  spawnWait: 0
+  spawnLeastWait: 1
+  spawnMostWait: 3
+  stop: 0
